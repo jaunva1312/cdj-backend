@@ -46,27 +46,8 @@ const customer = {
     },
 
     createCustomer: async function (req,res) {
-        const {
-            CustomerID, 
-            CreatedAt, 
-            CreatedBy,
-            CustomerGroupID, 
-            DeliveryOrder, 
-            CustomerName, 
-            CustomerAlias, 
-            DeliveryDays,
-            Address,
-            Location,
-            MobilePhone,
-            Email,
-            RFC,
-            Municipality,
-            State,
-            Country,
-            IsEnable
-        } = req.body
 
-       var sql = `INSERT INTO Customer(
+        var sql = `INSERT INTO Customer(
            CustomerID, 
            CreatedAt, 
            CreatedBy, 
@@ -86,6 +67,26 @@ const customer = {
            IsEnable) 
            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
         try {
+            const {
+                CustomerID, 
+                CreatedAt, 
+                CreatedBy,
+                CustomerGroupID, 
+                DeliveryOrder, 
+                CustomerName, 
+                CustomerAlias, 
+                DeliveryDays,
+                Address,
+                Location,
+                MobilePhone,
+                Email,
+                RFC,
+                Municipality,
+                State,
+                Country,
+                IsEnable
+            } = req.body
+    
             const [rows] = await pool.query(sql,
                 [CustomerID, 
                     CreatedAt, 
@@ -106,7 +107,7 @@ const customer = {
                     IsEnable]
                 );
             res.send({
-                message: 'customer created',
+                message: 'Customer created',
                 CustomerID: CustomerID,
                 CustomerName: CustomerName,
                 CustomerGroupID: CustomerGroupID
@@ -119,24 +120,7 @@ const customer = {
     },
 
     updateCustomer: async function(req,res) { 
-        const {id} = req.params;
-        const {
-            CustomerGroupID, 
-            DeliveryOrder, 
-            CustomerName, 
-            CustomerAlias, 
-            DeliveryDays,
-            Address,
-            Location,
-            MobilePhone,
-            Email,
-            RFC,
-            Municipality,
-            State,
-            Country,
-            IsEnable
-        } = req.body
-    
+        
         var sql = `UPDATE Customer SET
             CustomerGroupID = IFNULL(?,CustomerGroupID), 
             DeliveryOrder = IFNULL(?,DeliveryOrder), 
@@ -157,6 +141,24 @@ const customer = {
         var sqlConsult = 'SELECT * FROM Customer WHERE CustomerID = ?';
 
         try {
+            const {id} = req.params;
+            const {
+                CustomerGroupID, 
+                DeliveryOrder, 
+                CustomerName, 
+                CustomerAlias, 
+                DeliveryDays,
+                Address,
+                Location,
+                MobilePhone,
+                Email,
+                RFC,
+                Municipality,
+                State,
+                Country,
+                IsEnable
+            } = req.body
+
             const [result] = await pool.query(sql, 
                 [CustomerGroupID, 
                 DeliveryOrder, 
