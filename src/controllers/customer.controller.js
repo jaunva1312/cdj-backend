@@ -29,6 +29,7 @@ const customer = {
     },
 
     getCustomer: async function(req,res) { 
+        
         try {
             var sql = 'SELECT * FROM Customer WHERE CustomerID = ?';
             const [rows] = await pool.query(sql,[req.params.id]); 
@@ -43,6 +44,7 @@ const customer = {
                 message: 'Something goes wrong'
             });
         }  
+
     },
 
     createCustomer: async function (req,res) {
