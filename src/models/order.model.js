@@ -5,25 +5,20 @@ const require = createRequire(import.meta.url);
 const csv = require('csvtojson');
 
 const csvFileBasePath = "./csvfiles/"; // Data
-var csvData;// Parsed Data
-var X = []; // Input 1
-var Y = []; // Output
-var predictionInput = [];
-var regressionModel;
+
 
 
 const order = {
     suggestedOrder: async function(customerID, customerGroupShort, productShort, date){
         
-        
         try{
             const csvFilePath = getFilePath(customerGroupShort, productShort);
-            csvData =  await csv().fromFile(csvFilePath);
-            predictionInput = processData(customerID, date, csvData);
-            performRegression(); // Train the model on training data
-        
-            return predictOutput(predictionInput)
-          
+            var csvData =  await csv().fromFile(csvFilePath);
+            var predictionInputs = processData(customerID, date, csvData);
+            var suggestedOrderData = predictOutput(predictionInputs);
+            
+            return suggestedOrderData
+
         }catch(error){
             console.log(error);
             return "Something when worng with cvs file: " + error
@@ -40,8 +35,10 @@ function getFilePath(customerGroupShortName, productShortname){
 
 function processData(customerID, deliveryDate, rawDataFromFile) {
     
-    var deliveryDayNumber = new Date(deliveryDate).getDay();
-    var daysNumbersArray = [];
+    var predictionDeliveryDayNumber = new Date(deliveryDate).getDay();
+    var pastSalesAmountArray = [];
+    var X = []; // Model inputs array: Date a
+    var Y = []; // Model output array 
     var initialValues = [];
     
     /**
@@ -59,33 +56,50 @@ function processData(customerID, deliveryDate, rawDataFromFile) {
         },
      */
 
-    
-
+    //Process data from CVS
     rawDataFromFile.forEach((row) => {
-  
+        
+        // Filter Customer Data from csc file
         if(row.ClienteID==customerID){
+            //Create Input and Output arrays use in regression model
             X.push([dateToValue(row.FechaEntrega), parseFloat(row.Entrega.replace(/,/g, ''))]);
             Y.push([parseFloat(row.Venta.replace(/,/g, ''))]);
-            let currentDayNumber = new Date(row.FechaEntrega).getDay();
-            if(currentDayNumber == deliveryDayNumber){
-                daysNumbersArray.push(currentDayNumber);
+
+            //Create array for initial values: Date, Delivery
+            let deliveryDayNumber = new Date(row.FechaEntrega).getDay();
+            if(deliveryDayNumber == predictionDeliveryDayNumber){
+                pastSalesAmountArray.push(parseFloat(row.Venta.replace(/,/g, '')));
             }
         } 
     });
 
-    var deliverInitialValue = getMostRepeatedAmmount(daysNumbersArray);
-    initialValues.push(dateToValue(deliveryDate), deliverInitialValue);
-    return initialValues
+    var deliveryInitialValue = getMostRepeatedAmmount(pastSalesAmountArray);
+    initialValues.push(dateToValue(deliveryDate), deliveryInitialValue);
+
+
+    var regressionInputValues = {
+        initialValues: initialValues,
+        xArrayInput: X,
+        yArrayOutput: Y 
+    }
+    
+    return regressionInputValues
     
 }
 
-function performRegression() {
-    regressionModel = new MLR(X,Y); // Train the model on training data
 
-}
+function predictOutput(regressionInput) {
+    var regressionModel = new MLR(regressionInput.xArrayInput,regressionInput.yArrayOutput,[false,false]); // Train the model on training data
+    var salePrediction = regressionModel.predict(regressionInput.initialValues);
 
-function predictOutput(input) {
-    return regressionModel.predict(input);
+    if(salePrediction[0]<0)salePrediction[0]=0
+
+    var orderPrediction = {
+        salePredcition : salePrediction[0],
+        standardError : regressionModel.stdError
+    }
+    //console.log(orderPrediction);
+    return orderPrediction
 }
 
 function dateToValue(dateString) {
