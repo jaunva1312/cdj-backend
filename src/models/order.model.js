@@ -68,7 +68,7 @@ function processData(customerID, deliveryDate, rawDataFromFile) {
             //Create array for initial values: Date, Delivery
             let deliveryDayNumber = new Date(row.FechaEntrega).getDay();
             if(deliveryDayNumber == predictionDeliveryDayNumber){
-                pastSalesAmountArray.push(parseFloat(row.Venta.replace(/,/g, '')));
+                pastSalesAmountArray.push(parseFloat(row.Entrega.replace(/,/g, '')));
             }
         } 
     });
@@ -90,7 +90,7 @@ function processData(customerID, deliveryDate, rawDataFromFile) {
 
 function predictOutput(regressionInput) {
     var regressionModel = new MLR(regressionInput.xArrayInput,regressionInput.yArrayOutput,[false,false]); // Train the model on training data
-    var salePrediction = regressionModel.predict(regressionInput.initialValues)
+    var salePrediction = regressionModel.predict(regressionInput.initialValues);
 
     var orderPrediction = {
         salePredcition : salePrediction[0],
