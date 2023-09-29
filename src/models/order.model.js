@@ -90,22 +90,20 @@ function processData(customerID, deliveryDate, rawDataFromFile) {
 
 function predictOutput(regressionInput) {
     var regressionModel = new MLR(regressionInput.xArrayInput,regressionInput.yArrayOutput,[false,false]); // Train the model on training data
-    var salePrediction = regressionModel.predict(regressionInput.initialValues);
-
-    if(salePrediction[0]<0)salePrediction[0]=0
+    var salePrediction = regressionModel.predict(regressionInput.initialValues)
 
     var orderPrediction = {
         salePredcition : salePrediction[0],
         standardError : regressionModel.stdError
     }
-    //console.log(orderPrediction);
+
     return orderPrediction
 }
 
 function dateToValue(dateString) {
     let date = new Date(dateString);
     let converted = 25569.0 + ((date.getTime() - (date.getTimezoneOffset() * 60 * 1000)) / (1000 * 60 * 60 * 24));
-    return converted;
+    return Math.round(converted);
 }
 
 function getMostRepeatedAmmount(amountArray){
@@ -127,10 +125,4 @@ function getMostRepeatedAmmount(amountArray){
     return variable  
 }
   
-
-
-
-
-
-
 export default order;
