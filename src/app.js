@@ -2,6 +2,9 @@ import express from 'express'
 import customerRoutes from './routes/customer.routes.js'
 import customerGroupRoutes from './routes/customergroup.routes.js'
 import orderRoutes from './routes/order.routes.js'
+import operationInputRoutes from './routes/opeinput.routes.js'
+import operationReturnRoutes from './routes/opereturn.routes.js'
+import operationRoutes from './routes/operation.routes.js'
 
 
 const app = express();
@@ -16,6 +19,10 @@ app.use(express.json());
 app.use('/api',customerRoutes);
 app.use('/api',orderRoutes);
 app.use('/api',customerGroupRoutes);
+app.use('/api',operationInputRoutes);
+app.use('/api',operationReturnRoutes);
+app.use('/api',operationRoutes);
+
 
 
 app.use((req,res, next) => {

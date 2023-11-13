@@ -68,12 +68,15 @@ function processData(customerID, deliveryDate, rawDataFromFile) {
             //Create array for initial values: Date, Delivery
             let deliveryDayNumber = new Date(row.FechaEntrega).getDay();
             if(deliveryDayNumber == predictionDeliveryDayNumber){
-                pastSalesAmountArray.push(parseFloat(row.Entrega.replace(/,/g, '')));
+                pastSalesAmountArray.push(parseFloat(row.Venta.replace(/,/g, '')));
             }
         } 
     });
 
-    var deliveryInitialValue = getMostRepeatedAmmount(pastSalesAmountArray);
+    var lastPastSalesArray = pastSalesAmountArray.slice(-5);
+
+    //console.log(lastPastSalesArray);
+    var deliveryInitialValue = getMostRepeatedAmmount(lastPastSalesArray);
     initialValues.push(dateToValue(deliveryDate), deliveryInitialValue);
 
 
@@ -91,6 +94,8 @@ function processData(customerID, deliveryDate, rawDataFromFile) {
 function predictOutput(regressionInput) {
     var regressionModel = new MLR(regressionInput.xArrayInput,regressionInput.yArrayOutput,[false,false]); // Train the model on training data
     var salePrediction = regressionModel.predict(regressionInput.initialValues);
+
+    console.log(regressionInput.initialValues);
 
     var orderPrediction = {
         salePredcition : salePrediction[0],

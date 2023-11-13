@@ -5,10 +5,7 @@ import Order from '../models/order.model.js'
 const order = {
     
     getCustomerOrderByProduct: async function(req,res) {
-        //res.send('Obteniendo pedido del cliente ' + req.params.customerID + ' para el producto ' + req.params.productID); 
-
-        
-
+       
         try {
             var sql_customer = 'SELECT * FROM Customer WHERE CustomerID = ?';
             var sql_customerGroup = 'SELECT * FROM CustomerGroup WHERE CustomerGroupID = ?';
@@ -40,10 +37,6 @@ const order = {
                 var test = data;
                 res.send(test);
             })
-            
-
-
-            //res.send(productShortName);  
 
         } catch (error) {
             return res.status(500).json({
