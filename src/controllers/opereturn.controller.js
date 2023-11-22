@@ -1,7 +1,10 @@
 import {pool} from '../db.js'
+import Devolution from '../models/opereturn.model.js'
 
 
 const OpeReturn = {
+
+    //getReturn
 
     getOperationReturn: async function(req,res) { 
         
@@ -19,6 +22,53 @@ const OpeReturn = {
                 message: 'Something goes wrong'
             });
         }  
+
+    },
+
+    getWeekReturnsPercentage: async function(req,res) { 
+        //res.send("Devoluciones de la ruta:" + req.params.customergroupid);
+        
+        try {
+            var sqlInputs = `SELECT COALESCE(SUM(Quantity),0) AS inputAmmount 
+                                FROM OperationInput 
+                                WHERE FIND_IN_SET(ProductCategory, 'Frijoles,Salsas,Guisos,Maquilados') AND YEARWEEK(Date)=YEARWEEK(NOW()) AND CustomerGroupID = ? `;
+
+            
+            var sqlReturns = `SELECT COALESCE(SUM(HotReturn + ColdReturn + PoorConditionReturn),0) AS returnsAmmount
+                                FROM OperationReturn 
+                                WHERE FIND_IN_SET(ProductCategory, 'Frijoles,Salsas,Guisos,Maquilados') AND YEARWEEK(Date)=YEARWEEK(NOW()) AND CustomerGroupID = ?`
+            
+
+            const [rows_input] = await pool.query(sqlInputs,[req.params.customergroupid]);
+
+            
+            if(rows_input.length < 1) return res.status(404).json({
+                menssage: 'Inputs for Customer Group not found'
+
+            });
+
+            const [rows_returns] = await pool.query(sqlReturns,[req.params.customergroupid]); 
+            
+            if(rows_returns.length < 1) return res.status(404).json({
+                menssage: 'Returns for Customer Group not found'
+            });
+
+            var returnsPercentage = Devolution.getWeekReturnPorcentage(rows_input[0].inputAmmount, rows_returns[0].returnsAmmount);
+
+            
+            res.send({
+                Entradas: rows_input[0].inputAmmount,
+                Devoluciones: rows_returns[0].returnsAmmount,
+                ReturnPercentage: returnsPercentage
+            });
+          
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong: ' + error 
+            });
+        } 
+        
 
     },
     

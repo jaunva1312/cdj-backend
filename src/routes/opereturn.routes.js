@@ -5,6 +5,8 @@ const router = Router()
 
 router.get('/operationreturn/:id', OpeReturn.getOperationReturn);
 
+router.get('/weekpercentage/:customergroupid', OpeReturn.getWeekReturnsPercentage);
+
 router.post('/operationreturn', OpeReturn.createOperationReturn);
 
 router.patch('/operationreturn/:id', OpeReturn.updateOperationReturn);
