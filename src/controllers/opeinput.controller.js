@@ -1,147 +1,74 @@
-import {pool} from '../db.js'
+import OperationInput from '../models/operationinput.model.js'
 
 
 const OpeInput = {
 
     getOperationInput: async function(req,res) { 
-        
-        try {
-            var sql = 'SELECT * FROM OperationInput WHERE OperationInputID = ?';
-            const [rows] = await pool.query(sql,[req.params.id]); 
 
-            if(rows.length < 1) return res.status(404).json({
-                menssage: 'Operation Input not found'
+        try{
+
+            const operationInput = await OperationInput.getOperationInputById(req.params.id);
+
+            if( operationInput == null) return res.status(404).json({
+                menssage: 'Operation input not found'
 
             });
-            res.send(rows[0]);
+
+            res.send(operationInput);  
+
         } catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something goes wrong getting the operation input: ' + error
             });
-        }  
-
+        } 
     },
     
     createOperationInput: async function (req,res) {
 
-        var sql = `INSERT INTO OperationInput(
-           OperationInputID, 
-           OperationID, 
-           CreatedAt,
-           Date,
-           CreatedBy, 
-           CustomerGroupID, 
-           ProductID, 
-           ProductName, 
-           ProductCategory, 
-           Quantity) 
-           VALUES(?,?,?,?,?,?,?,?,?,?)`;
-        try {
-            const {
-                OperationInputID, 
-                OperationID, 
-                CreatedAt,
-                Date, 
-                CreatedBy, 
-                CustomerGroupID, 
-                ProductID, 
-                ProductName,
-                ProductCategory,
-                Quantity
-            } = req.body
-    
-            const [rows] = await pool.query(sql,
-                [OperationInputID, 
-                    OperationID, 
-                    CreatedAt,
-                    Date, 
-                    CreatedBy, 
-                    CustomerGroupID, 
-                    ProductID, 
-                    ProductName,
-                    ProductCategory,
-                    Quantity]
-                );
-            res.send({
-                message: 'Operation Input created',
-                OperationInputID: OperationInputID,
-                ProductName: ProductName,
-                Quantity: Quantity
-            }); 
+        try{
+            const newOperation = await OperationInput.createOperationInput(req.body);
+            res.send(newOperation);
+
         } catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something went wrong creating the operation input,' + error
             });
         }
     },
 
     updateOperationInput: async function(req,res) { 
-        
-        var sql = `UPDATE OperationInput SET 
-            CreatedAt = IFNULL(?,CreatedAt),
-            Date = IFNULL(?,Date),
-            CreatedBy = IFNULL(?,CreatedBy), 
-            CustomerGroupID = IFNULL(?,CustomerGroupID), 
-            ProductID = IFNULL(?,ProductID), 
-            ProductName = IFNULL(?,ProductName), 
-            ProductCategory = IFNULL(?,ProductCategory), 
-            Quantity = IFNULL(?,Quantity)
-            WHERE OperationInputID = ?`;
 
-        var sqlConsult = 'SELECT * FROM OperationInput WHERE OperationInputID = ?';
+        try{
+            const updatedOperation = await OperationInput.updateOperationInput(req.body, req.params.id);
+            res.json(updatedOperation);
 
-        try {
-            const {id} = req.params;
-            const { 
-                CreatedAt,
-                Date, 
-                CreatedBy, 
-                CustomerGroupID, 
-                ProductID, 
-                ProductName,
-                ProductCategory,
-                Quantity
-            } = req.body
-
-            const [result] = await pool.query(sql, 
-                [CreatedAt,
-                    Date, 
-                    CreatedBy, 
-                    CustomerGroupID, 
-                    ProductID, 
-                    ProductName,
-                    ProductCategory,
-                    Quantity,id]);
-    
-            if(result.affectedRows === 0) return res.status(404).json({
-                menssage: 'Operation Input not found'
-            });
-    
-            const [rows] = await pool.query(sqlConsult,[id]);
-            res.json(rows[0]);
-
-        } catch (error) {
+        }catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something goes wrong, ' + error
             });
         }
+
     },
 
     deleteOperationInput: async function(req,res) { 
-        var sql = 'DELETE FROM OperationInput WHERE OperationInputID = ?'
-        try {
-            const [result] = await pool.query(sql,[req.params.id]); 
 
-            if(result.affectedRows < 1) return res.status(404).json({
-                menssage: 'Operation Input not found'
-            });
+        try{
+            
+            const deleteOperationInputRow = await OperationInput.deleteOperationInput(req.params.id);
 
+            if(deleteOperationInputRow < 1){
+                return res.status(404).json({
+                    menssage: 'Operation input not found'
+                });
+            }
             res.sendStatus(204); 
+
         } catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something goes wrong: ' + error
             });
         }
+        
     }
 }
 
