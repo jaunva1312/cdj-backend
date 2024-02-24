@@ -102,7 +102,7 @@ class User {
 
         try {
            
-            var sql = 'SELECT * FROM User WHERE id = ?';
+            var sql = 'SELECT * FROM user WHERE id = ?';
     
             const [rows] = await pool.query(sql,[id]); 
     
@@ -115,7 +115,7 @@ class User {
         
         } catch (error) {
             
-            throw('Something went wrong finding user by UserID:' + error);
+            throw('Something went wrong finding user by id:' + error);
             
         }
 
@@ -125,7 +125,7 @@ class User {
 
         try {
            
-            var sql = 'SELECT * FROM User WHERE user_name = ?';
+            var sql = 'SELECT * FROM user WHERE user_name = ?';
     
             const [rows] = await pool.query(sql,[userName]); 
     
@@ -140,7 +140,7 @@ class User {
         
         } catch (error) {
             
-            throw('Something went wrong finding user by UserName: ' + error);
+            throw('Something went wrong finding user by user name: ' + error);
             
         }
 
@@ -151,7 +151,7 @@ class User {
 
         try {
            
-            var sql = 'SELECT * FROM User WHERE email = ?';
+            var sql = 'SELECT * FROM user WHERE email = ?';
     
             const [rows] = await pool.query(sql,[email]); 
     
@@ -162,7 +162,7 @@ class User {
         
         } catch (error) {
             
-            throw('Something went wrong finding the Email: ' + error);
+            throw('Something went wrong finding the email: ' + error);
             
         }
 
@@ -175,7 +175,7 @@ class User {
 
         try{
 
-            var sql = 'SELECT * FROM User';
+            var sql = 'SELECT * FROM user';
             const [rows] = await pool.query(sql); 
 
             if(rows.length < 1) return res.status(404).json({
@@ -205,7 +205,7 @@ class User {
             }
                
             //SQL query to insert new unser
-            var sql = `INSERT INTO User(
+            var sql = `INSERT INTO user(
                 id, 
                 user_name,
                 name,
@@ -242,7 +242,7 @@ class User {
 
         try {
 
-            var sql = `UPDATE User SET
+            var sql = `UPDATE user SET
                 name = IFNULL(?,name), 
                 password = IFNULL(?,password), 
                 roles = IFNULL(?,roles), 
@@ -287,7 +287,7 @@ class User {
 
         try {
 
-            var sql = 'DELETE FROM User WHERE id = ?'
+            var sql = 'DELETE FROM user WHERE id = ?'
 
             const [result] = await pool.query(sql,[id]); 
             
