@@ -10,11 +10,12 @@ export const verifyToken = async (req,res,next) => {
 
         if(!token) return res.status(403).json({message: "No token provided"});
 
-        const decoded = jwt.verify(token, config.SECRET)
+        const decoded = jwt.verify(token, config.SECRET);
+    
         req.id = decoded.id;
     
         const user = await User.findByID(req.id);
-
+    
         if(!user) return res.status(404).json({message: 'User not found'});
 
         next();

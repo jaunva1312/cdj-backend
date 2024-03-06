@@ -7,6 +7,9 @@ import operationInputRoutes from './routes/opeinput.routes.js'
 import operationReturnRoutes from './routes/opereturn.routes.js'
 import operationRoutes from './routes/operation.routes.js'
 import userRoutes from './routes/user.routes.js'
+import productRoutes from './routes/product.routes.js'
+import productCategoryRoutes from './routes/productcategory.routes.js'
+import productGroupRoutes from './routes/productgroup.routes.js'
 import authRoutes from './routes/auth.routes.js'
 
 
@@ -30,6 +33,9 @@ app.use('/api',operationInputRoutes);
 app.use('/api',operationReturnRoutes);
 app.use('/api',operationRoutes);
 app.use('/api',userRoutes);
+app.use('/api',productRoutes);
+app.use('/api',productCategoryRoutes);
+app.use('/api',productGroupRoutes);
 app.use('/api/auth',authRoutes);
 
 app.use((req,res, next) => {

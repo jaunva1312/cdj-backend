@@ -5,7 +5,7 @@ const customer = {
     
     getCustomers: async function(req,res) {
         try {
-            var sql = 'SELECT * FROM Customer';
+            var sql = 'SELECT * FROM customer';
             const [rows] = await pool.query(sql);
             res.json(rows);
         } catch (error) {
@@ -17,7 +17,7 @@ const customer = {
 
     getCustomersByGroup: async function(req,res) {    
         try{
-            var sql = 'SELECT * FROM Customer WHERE CustomerGroupID = ?';
+            var sql = 'SELECT * FROM customer WHERE customer_group_id = ?';
             const [rows] = await pool.query(sql,[req.params.id]); 
             res.send(rows);
         } catch (error) {
@@ -31,7 +31,7 @@ const customer = {
     getCustomer: async function(req,res) { 
         
         try {
-            var sql = 'SELECT * FROM Customer WHERE CustomerID = ?';
+            var sql = 'SELECT * FROM customer WHERE id = ?';
             const [rows] = await pool.query(sql,[req.params.id]); 
 
             if(rows.length < 1) return res.status(404).json({
@@ -49,9 +49,9 @@ const customer = {
 
     createCustomer: async function (req,res) {
 
-        var sql = `INSERT INTO Customer(
-           CustomerID, 
-           CreatedAt, 
+        var sql = `INSERT INTO customer(
+           id, 
+           created_at, 
            CreatedBy, 
            CustomerGroupID, 
            DeliveryOrder, 
