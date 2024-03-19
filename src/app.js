@@ -10,6 +10,8 @@ import userRoutes from './routes/user.routes.js'
 import productRoutes from './routes/product.routes.js'
 import productCategoryRoutes from './routes/productcategory.routes.js'
 import productGroupRoutes from './routes/productgroup.routes.js'
+import warehouse from './routes/warehouse.routes.js'
+import movement from './routes/movement.routes.js'
 import authRoutes from './routes/auth.routes.js'
 
 
@@ -36,6 +38,8 @@ app.use('/api',userRoutes);
 app.use('/api',productRoutes);
 app.use('/api',productCategoryRoutes);
 app.use('/api',productGroupRoutes);
+app.use('/api',warehouse);
+app.use('/api',movement);
 app.use('/api/auth',authRoutes);
 
 app.use((req,res, next) => {

@@ -308,9 +308,11 @@ class User {
 
         const newUser = new User(rawUserObject.user_name, rawUserObject.password);
 
-        if(rawUserObject.id != null){        
-            newUser.id = rawUserObject.id;
+
+        if(rawUserObject.id != null){     
+            newUser.userID = rawUserObject.id;
         }
+
 
         newUser.name = rawUserObject.name;
         newUser.email = rawUserObject.email;

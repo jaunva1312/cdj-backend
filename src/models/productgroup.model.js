@@ -52,7 +52,6 @@ class ProductGroup  {
             const {
                 id_product_group,
                 name
-                
             } = productGroupRawObject
         
             const [rows] = await pool.query(sql,[
@@ -80,7 +79,7 @@ class ProductGroup  {
 
 
             const { 
-                name,
+                name
             } = productGroupObject
 
             const [result] = await pool.query(sql,[
