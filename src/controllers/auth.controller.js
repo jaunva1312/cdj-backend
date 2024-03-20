@@ -45,7 +45,7 @@ export const login = async (req,res) => {
 
         const matchPassword = await User.comparePassword(req.body.password, userFound.password);
 
-        if(!matchPassword) return res.status(401).json({token: null, message:"Invalid password"});
+        if(!matchPassword) return res.status(401).json({message:"Invalid password"});
 
 
         //Create token
