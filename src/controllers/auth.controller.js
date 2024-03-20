@@ -25,7 +25,11 @@ export const signUp = async (req,res) => {
 
 
         //Send response
-        res.status(200).json({token});
+        res.status(200).json({
+            token: token,
+            user_name: userFound.userName,
+            roles:userFound.roles
+        });
 
             
     } catch (error) {
@@ -42,6 +46,8 @@ export const login = async (req,res) => {
 
     try {
         const userFound = await User.findByUserName(req.body.user_name);
+
+        if(userFound == null) return res.status(401).json({message:"User not found"});
 
         const matchPassword = await User.comparePassword(req.body.password, userFound.password);
 
@@ -60,7 +66,11 @@ export const login = async (req,res) => {
         */
 
         //Send response
-        res.status(200).json({token});
+        res.status(200).json({
+            token: token,
+            user_name: userFound.userName,
+            roles:userFound.roles
+        });
         
         
     } catch (error) {
