@@ -250,7 +250,7 @@ class User {
                 is_enable = IFNULL(?,is_enable)
                 WHERE id = ?`;
 
-            var sqlConsult = 'SELECT * FROM User WHERE id = ?';
+            var sqlConsult = 'SELECT * FROM user WHERE id = ?';
 
 
             const {
