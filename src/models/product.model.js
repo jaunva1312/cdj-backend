@@ -7,7 +7,14 @@ class Product  {
     static async getProducts(){
         
         try {
-            var sql = 'SELECT * FROM product';
+            
+            var sql = `SELECT product.*, product_group.product_group_name, product_category.product_category_name, supplier.supplier_name FROM product
+                LEFT JOIN product_group 
+                ON product.id_product_group = product_group.id_product_group
+                LEFT JOIN product_category
+                ON product.id_product_category = product_category.id_product_category
+                LEFT JOIN supplier
+                ON product.id_supplier = supplier.id_supplier`
             
             const [rows] = await pool.query(sql); 
 
@@ -25,7 +32,14 @@ class Product  {
     static async getProductById(id){
 
         try {
-            var sql = 'SELECT * FROM product WHERE id_product = ?';
+            var sql = `SELECT product.*, product_group.product_group_name, product_category.product_category_name, supplier.supplier_name FROM product
+                LEFT JOIN product_group 
+                ON product.id_product_group = product_group.id_product_group
+                LEFT JOIN product_category
+                ON product.id_product_category = product_category.id_product_category
+                LEFT JOIN supplier
+                ON product.id_supplier = supplier.id_supplier 
+                WHERE product.id_product = ?`;
             
             const [rows] = await pool.query(sql,[id]); 
 
