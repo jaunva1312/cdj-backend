@@ -1,4 +1,4 @@
-
+import {pool} from '../db.js'
 
 class Customer  {
     
@@ -29,6 +29,57 @@ class Customer  {
         var randomNumber = (Math.floor(min+ Math.random()*(max-min+1))).toString(16);
         //console.log(randomNumber);
         return randomNumber  
+    }
+
+    findNearestCustomers(){
+
+    }
+
+    static async getCustomers(){
+        
+        try {
+            
+            var sql = `SELECT * FROM customer`
+            
+            const [rows] = await pool.query(sql); 
+
+            if(rows.length < 1) return null;
+            
+            return rows;  
+
+        } catch (error) {
+            throw(error);
+        } 
+
+    }
+
+    static async getNearestSellPoint(lat, long){
+
+        try {
+            
+            var sql = 
+                `SELECT id,name,alias,address,
+                    ST_Distance_Sphere(
+                      POINT(?, ?),      
+                      coordinates
+                    ) as distance
+                FROM customer
+                
+                WHERE 
+                coordinates IS NOT NULL
+                 
+                ORDER BY distance
+                LIMIT 5`
+                const [rows] = await pool.query(sql,[long,lat]);
+
+                if(rows.length < 1) return null;
+            
+                return rows; 
+
+        } catch (error) {
+            throw(error);
+        } 
+
     }
     
     

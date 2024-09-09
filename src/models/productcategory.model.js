@@ -7,7 +7,7 @@ class ProductCategory  {
     static async getProductCategories(){
         
         try {
-            var sql = 'SELECT * FROM productcategory';
+            var sql = 'SELECT * FROM product_category';
             
             const [rows] = await pool.query(sql); 
 
@@ -25,7 +25,7 @@ class ProductCategory  {
     static async getProductCategoryById(id){
         
         try {
-            var sql = 'SELECT * FROM productcategory WHERE id_product_category = ?';
+            var sql = 'SELECT * FROM product_category WHERE id_product_category = ?';
             
             const [rows] = await pool.query(sql,[id]); 
 
@@ -44,20 +44,20 @@ class ProductCategory  {
 
             productCategoryRawObject.id_product_category = createUniqueID();
             
-            var sql = `INSERT INTO productcategory(
+            var sql = `INSERT INTO product_category(
                 id_product_category,
-                name) 
+                product_category_name) 
                 VALUES(?,?)`;
 
             const {
                 id_product_category,
-                name
+                product_category_name
                 
             } = productCategoryRawObject
         
             const [rows] = await pool.query(sql,[
                 id_product_category,
-                name
+                product_category_name
             ]);
 
             return productCategoryRawObject;
@@ -72,19 +72,19 @@ class ProductCategory  {
 
         try {
 
-            var sql = `UPDATE productcategory SET 
-                name = IFNULL(?,name)
-                WHERE id_product_category= ?`;
+            var sql = `UPDATE product_category SET 
+                product_category_name = IFNULL(?,product_category_name)
+                WHERE id_product_category = ?`;
 
-            var sqlConsult = 'SELECT * FROM productcategory WHERE id_product_category = ?';
+            var sqlConsult = 'SELECT * FROM product_category WHERE id_product_category = ?';
 
 
             const { 
-                name,
+                product_category_name,
             } = productCategoryObject
 
             const [result] = await pool.query(sql,[
-                name,id
+                product_category_name,id
             ]);
 
     
@@ -103,7 +103,7 @@ class ProductCategory  {
     static async deleteProductCategory(id){
         
         try {
-            var sql = 'DELETE FROM productcategory WHERE id_product_category = ?'
+            var sql = 'DELETE FROM product_category WHERE id_product_category = ?'
             const [result] = await pool.query(sql,[id]); 
 
             return result.affectedRows;

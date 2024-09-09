@@ -7,7 +7,7 @@ class ProductGroup  {
     static async getProductGroups(){
         
         try {
-            var sql = 'SELECT * FROM productgroup';
+            var sql = 'SELECT * FROM product_group';
             
             const [rows] = await pool.query(sql); 
 
@@ -25,7 +25,7 @@ class ProductGroup  {
     static async getProductGroupById(id){
         
         try {
-            var sql = 'SELECT * FROM productgroup WHERE id_product_group = ?';
+            var sql = 'SELECT * FROM product_group WHERE id_product_group = ?';
             
             const [rows] = await pool.query(sql,[id]); 
 
@@ -44,19 +44,19 @@ class ProductGroup  {
 
             productGroupRawObject.id_product_group = createUniqueID();
             
-            var sql = `INSERT INTO productgroup(
+            var sql = `INSERT INTO product_group(
                 id_product_group,
-                name) 
+                product_group_name) 
                 VALUES(?,?)`;
 
             const {
                 id_product_group,
-                name
+                product_group_name
             } = productGroupRawObject
         
             const [rows] = await pool.query(sql,[
                 id_product_group,
-                name
+                product_group_name
             ]);
 
             return productGroupRawObject;
@@ -71,19 +71,19 @@ class ProductGroup  {
 
         try {
 
-            var sql = `UPDATE productgroup SET 
-                name = IFNULL(?,name)
+            var sql = `UPDATE product_group SET 
+                product_group_name = IFNULL(?,product_group_name)
                 WHERE id_product_group = ?`;
 
-            var sqlConsult = 'SELECT * FROM productgroup WHERE id_product_group = ?';
+            var sqlConsult = 'SELECT * FROM product_group WHERE id_product_group = ?';
 
 
             const { 
-                name
+                product_group_name
             } = productGroupObject
 
             const [result] = await pool.query(sql,[
-                name,id
+                product_group_name,id
             ]);
 
     
@@ -102,7 +102,7 @@ class ProductGroup  {
     static async deleteProductGroup(id){
         
         try {
-            var sql = 'DELETE FROM productgroup WHERE id_product_group = ?'
+            var sql = 'DELETE FROM product_group WHERE id_product_group = ?'
             const [result] = await pool.query(sql,[id]); 
 
             return result.affectedRows;

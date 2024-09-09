@@ -5,12 +5,11 @@ const customer = {
     
     getCustomers: async function(req,res) {
         try {
-            var sql = 'SELECT * FROM customer';
-            const [rows] = await pool.query(sql);
-            res.json(rows);
+            const customers = await Customer.getCustomers();
+            res.send(customers);
         } catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something goes wrong getting customers '  + error
             });
         }
     },
@@ -206,7 +205,18 @@ const customer = {
                 message: 'Something goes wrong'
             });
         }
-    }
+    },
+
+    getNearestSellPoint: async function(req,res) {
+        try {
+            const customers = await Customer.getNearestSellPoint(req.params.lat, req.params.long);
+            res.send(customers);
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the nearest customers '  + error
+            });
+        }
+    },
 }
 
 export default customer
