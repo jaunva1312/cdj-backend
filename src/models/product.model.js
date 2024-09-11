@@ -19,6 +19,10 @@ class Product  {
             const [rows] = await pool.query(sql); 
 
             if(rows.length < 1) return null;
+
+            rows.forEach(rawUser =>{
+                users.push(this.castUserModel(rawUser));
+            });
             
             return rows;  
 
@@ -45,7 +49,7 @@ class Product  {
 
             if(rows.length < 1) return null;
             
-            return rows[0];  
+            return this.casProductModel(rows[0]);  
 
         } catch (error) {
             throw(error);
@@ -54,16 +58,19 @@ class Product  {
 
     static async createProduct(productRawObject){
 
+        
+
         try{
 
-            productRawObject.id = createUniqueID();
+            productRawObject.id_product = createUniqueID();
+
+            console.log(productRawObject);
             
             var sql = `INSERT INTO product(
                 id_product,
                 view_order,
                 name,
                 short_name,
-                quantity,
                 id_product_category,
                 id_product_group,
                 price, 
@@ -72,18 +79,17 @@ class Product  {
                 id_supplier,
                 elaboration_date,
                 expiration_date,
-                image, 
+                images, 
                 is_available,
                 is_for_route_sales,
                 is_for_public_sales) 
-                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
             const {
                 id_product,
                 view_order,
                 name,
                 short_name,
-                quantity,
                 id_product_category,
                 id_product_group,
                 price, 
@@ -92,7 +98,7 @@ class Product  {
                 id_supplier,
                 elaboration_date,
                 expiration_date,
-                image, 
+                images, 
                 is_available,
                 is_for_route_sales,
                 is_for_public_sales
@@ -103,7 +109,6 @@ class Product  {
                 view_order,
                 name,
                 short_name,
-                quantity,
                 id_product_category,
                 id_product_group,
                 price, 
@@ -112,7 +117,7 @@ class Product  {
                 id_supplier,
                 elaboration_date,
                 expiration_date,
-                image, 
+                images, 
                 is_available,
                 is_for_route_sales,
                 is_for_public_sales
@@ -134,7 +139,6 @@ class Product  {
                 view_order = IFNULL(?,view_order), 
                 name = IFNULL(?,name), 
                 short_name = IFNULL(?,short_name), 
-                quantity = IFNULL(?,quantity),
                 id_product_category = IFNULL(?,id_product_category),
                 id_product_group = IFNULL(?,id_product_group),
                 price = IFNULL(?,price),
@@ -143,20 +147,19 @@ class Product  {
                 id_supplier = IFNULL(?,id_supplier),
                 elaboration_date = IFNULL(?,elaboration_date),
                 expiration_date = IFNULL(?,expiration_date),
-                image = IFNULL(?,image),
+                images = IFNULL(?,images),
                 is_available = IFNULL(?,is_available),
                 is_for_route_sales = IFNULL(?,is_for_route_sales),
                 is_for_public_sales = IFNULL(?,is_for_public_sales)                
                 WHERE id_product = ?`;
 
-            var sqlConsult = 'SELECT * FROM product WHERE id = ?';
+            var sqlConsult = 'SELECT * FROM product WHERE id_product = ?';
 
 
             const { 
                 view_order,
                 name,
                 short_name,
-                quantity,
                 id_product_category,
                 id_product_group,
                 price, 
@@ -165,7 +168,7 @@ class Product  {
                 id_supplier,
                 elaboration_date,
                 expiration_date,
-                image, 
+                images, 
                 is_available,
                 is_for_route_sales,
                 is_for_public_sales
@@ -175,7 +178,6 @@ class Product  {
                 view_order,
                 name,
                 short_name,
-                quantity,
                 id_product_category,
                 id_product_group,
                 price, 
@@ -184,7 +186,7 @@ class Product  {
                 id_supplier,
                 elaboration_date,
                 expiration_date,
-                image, 
+                images.toString(),
                 is_available,
                 is_for_route_sales,
                 is_for_public_sales,id
@@ -214,6 +216,24 @@ class Product  {
         } catch (error) {
             throw (error);
         }
+    }
+
+    static casProductModel(rawProductObject){
+
+        //Convert images property to an array
+        var newProductObject = rawProductObject;
+    
+        
+        if(Array.isArray(rawProductObject.images)){
+            newProductObject.images = rawProductObject.images;
+        }else{
+            newProductObject.images = rawProductObject.images.split(",");
+        }
+
+
+
+        return newProductObject;
+
     }
 
     

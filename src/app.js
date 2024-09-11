@@ -41,6 +41,7 @@ app.use('/api',productGroupRoutes);
 app.use('/api',warehouse);
 app.use('/api',movement);
 app.use('/api/auth',authRoutes);
+app.use('/api/images',express.static('photos'));
 
 app.use((req,res, next) => {
     res.status(404).json({
