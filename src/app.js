@@ -1,3 +1,4 @@
+import { createRequire } from "module";
 import express, { urlencoded } from 'express'
 import morgan from 'morgan'
 import customerRoutes from './routes/customer.routes.js'
@@ -17,14 +18,20 @@ import authRoutes from './routes/auth.routes.js'
 
 
 //Initializations
+const require = createRequire(import.meta.url);
+var cors = require('cors');
 const app = express();
-
+// const corsOptions = {
+//     origin: 'http://localhost:4200/',//(https://your-client-app.com)
+//     optionsSuccessStatus: 200,
+// };
 
 
 
 //Middleware
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 
 
 //Routes
