@@ -58,7 +58,7 @@ class Customer  {
         try {
             
             var sql = 
-                `SELECT id,name,alias,address,
+                `SELECT id,name,alias,customer_group_id,address,coordinates,
                     ST_Distance_Sphere(
                       POINT(?, ?),      
                       coordinates

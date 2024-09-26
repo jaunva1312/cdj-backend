@@ -21,17 +21,14 @@ import authRoutes from './routes/auth.routes.js'
 const require = createRequire(import.meta.url);
 var cors = require('cors');
 const app = express();
-// const corsOptions = {
-//     origin: 'http://localhost:4200/',//(https://your-client-app.com)
-//     optionsSuccessStatus: 200,
-// };
+
 
 
 
 //Middleware
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(cors());
+app.use(cors()); // It was Added to avoid error "from origin 'http://localhost:4200' has been blocked by CORS policy Angular error Fix"
 
 
 //Routes
