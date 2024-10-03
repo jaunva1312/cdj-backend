@@ -15,7 +15,7 @@ router.get('/customers/nearest-customer/:lat/:long', Customer.getNearestSellPoin
 
 router.post('/customer', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.createCustomer);
 
-router.patch('/customer/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.updateCustomer);
+router.patch('/customer/:id', authJwt.verifyToken, Customer.updateCustomer);
 
 router.delete('/customer/:id', [authJwt.verifyToken, authJwt.isAdmin], Customer.deleteCustomer);
 

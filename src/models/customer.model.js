@@ -1,40 +1,9 @@
 import {pool} from '../db.js'
+import {createUniqueID} from '../libs/dataBase.js'
 
 class Customer  {
     
-    constructor() {
-        
-        this.customerID = this.createID();
-        this.createdAt = new Date();
-        this.createdBy = createdBy;
-        this.customerGroupID;
-        this.deliveryOrder;
-        this.customerName;
-        this.deliveryDays;
-        this.address;
-        this.location;
-        this.mobilePhone;
-        this.email = email;
-        this.rfc;
-        this.municipality;
-        this.state;
-        this.country;
-        this.isEnable = 1;
-    }
-
-
-    createID() {
-        var max = 4294967295;
-        var min = 0;
-        var randomNumber = (Math.floor(min+ Math.random()*(max-min+1))).toString(16);
-        //console.log(randomNumber);
-        return randomNumber  
-    }
-
-    findNearestCustomers(){
-
-    }
-
+   
     static async getCustomers(){
         
         try {
@@ -51,6 +20,188 @@ class Customer  {
             throw(error);
         } 
 
+    }
+
+    static async createCustomer(customerRawObject) {
+            
+        try {
+
+            customerRawObject.id = createUniqueID();
+            customerRawObject.created_at = new Date();
+
+               
+            //SQL query to insert new unser
+            var sql = `INSERT INTO customer(
+                id,
+                created_at,
+                created_by,
+                customer_group_id, 
+                delivery_order, 
+                name, 
+                alias, 
+                delivery_days,
+                address,
+                location,
+                latitude, 
+                longitude,
+                coordinates,
+                mobile_phone,
+                email,
+                rfc,
+                municipality,
+                state,
+                country,
+                is_enable) 
+                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+            
+            var sqlConsult = 'SELECT * FROM customer WHERE id = ?';
+
+            //Inser new customer
+            const {
+                id,
+                created_at,
+                created_by,
+                customer_group_id, 
+                delivery_order, 
+                name, 
+                alias, 
+                delivery_days,
+                address,
+                location,
+                latitude, 
+                longitude,
+                coordinates,
+                mobile_phone,
+                email,
+                rfc,
+                municipality,
+                state,
+                country,
+                is_enable
+            } = customerRawObject
+            
+            const [rows] = await pool.query(sql,[
+                id,
+                created_at,
+                created_by,
+                customer_group_id, 
+                delivery_order, 
+                name, 
+                alias, 
+                delivery_days,
+                address,
+                location,
+                latitude, 
+                longitude,
+                coordinates,
+                mobile_phone,
+                email,
+                rfc,
+                municipality,
+                state,
+                country,
+                is_enable
+            ]);
+
+            console.log(rows[0]);
+
+            return customerRawObject;
+    
+        } catch (error) {
+            throw (error);
+        }
+    
+    }
+
+    static async updateCustomer(modifiedCustomerObject, id){
+
+        try {
+
+            var sql = `UPDATE customer SET
+                customer_group_id = IFNULL(?,customer_group_id), 
+                delivery_order = IFNULL(?,delivery_order),
+                name = IFNULL(?,name),
+                alias = IFNULL(?,alias), 
+                delivery_days = IFNULL(?,delivery_days), 
+                address = IFNULL(?,address),
+                location = IFNULL(?,location), 
+                latitude = IFNULL(?,latitude), 
+                longitude = IFNULL(?,longitude),
+                coordinates = IFNULL(?,coordinates),
+                mobile_phone = IFNULL(?,mobile_phone), 
+                email = IFNULL(?,email), 
+                rfc = IFNULL(?,rfc), 
+                municipality = IFNULL(?,municipality), 
+                state = IFNULL(?,state), 
+                country = IFNULL(?,country),
+                is_enable = IFNULL(?,is_enable)
+                WHERE id = ?`;
+
+            var sqlConsult = 'SELECT * FROM customer WHERE id = ?';
+
+
+            const {
+                customer_group_id, 
+                delivery_order, 
+                name, 
+                alias, 
+                delivery_days,
+                address,
+                location,
+                latitute,
+                longitude,
+                coordinates,
+                mobile_phone,
+                email,
+                rfc,
+                municipality,
+                state,
+                country,
+                is_enable
+            } = modifiedCustomerObject
+
+            const [result] = await pool.query(sql, [
+                customer_group_id, 
+                delivery_order, 
+                name, 
+                alias, 
+                delivery_days,
+                address,
+                location,
+                latitute,
+                longitude,
+                coordinates,
+                mobile_phone,
+                email,
+                rfc,
+                municipality,
+                state,
+                country,
+                is_enable, id
+            ]);
+           
+            if(result.affectedRows === 0) throw ("Customer not found");
+
+            let  [rows] = await pool.query(sqlConsult,[id]);
+
+            return rows[0];
+
+        } catch (error) {
+            throw (error);
+        }
+    }
+
+    static async deleteCustomer(id){
+        
+        try {
+            var sql = 'DELETE FROM customer WHERE id = ?'
+            const [result] = await pool.query(sql,[id]); 
+
+            return result.affectedRows;
+
+        } catch (error) {
+            throw (error);
+        }
     }
 
     static async getNearestSellPoint(lat, long){
