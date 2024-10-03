@@ -23,13 +23,19 @@ class Customer  {
     }
 
     static async createCustomer(customerRawObject) {
+
+        console.log(customerRawObject);
             
         try {
 
-            customerRawObject.id = createUniqueID();
-            customerRawObject.created_at = new Date();
+            if(!customerRawObject.id){
+                customerRawObject.id = createUniqueID();
+            }
 
-               
+            if(!customerRawObject.created_at){
+                customerRawObject.created_at = new Date();
+            }
+            
             //SQL query to insert new unser
             var sql = `INSERT INTO customer(
                 id,
@@ -103,7 +109,6 @@ class Customer  {
                 is_enable
             ]);
 
-            console.log(rows[0]);
 
             return customerRawObject;
     
