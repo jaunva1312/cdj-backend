@@ -22,6 +22,41 @@ class Customer  {
 
     }
 
+    static async getCustomersByGroup(customerGroupId){
+        
+        try {
+            
+            var sql = 'SELECT * FROM customer WHERE customer_group_id = ? ORDER BY delivery_order ';
+            
+            const [rows] = await pool.query(sql,[customerGroupId]); 
+
+            if(rows.length < 1) return null;
+            
+            return rows;  
+
+        } catch (error) {
+            throw(error);
+        }
+
+    }
+
+    static async getCustomer(customerId){
+        
+        try {
+            
+            var sql = 'SELECT * FROM customer WHERE id = ?';
+            
+            const [rows] = await pool.query(sql,customerId); 
+
+            if(rows.length < 1) return null;
+            
+            return rows;  
+
+        } catch (error) {
+            throw(error);
+        }  
+    }
+
     static async createCustomer(customerRawObject) {
 
         console.log(customerRawObject);

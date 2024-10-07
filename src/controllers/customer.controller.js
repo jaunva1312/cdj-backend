@@ -15,34 +15,26 @@ const customer = {
     },
 
     getCustomersByGroup: async function(req,res) {    
-        try{
-            var sql = 'SELECT * FROM customer WHERE customer_group_id = ?';
-            const [rows] = await pool.query(sql,[req.params.id]); 
-            res.send(rows);
+        try {
+            const customers = await Customer.getCustomersByGroup(req.params.id);
+            res.send(customers);
         } catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something goes wrong getting customers '  + error
             });
         }
         
     },
 
     getCustomer: async function(req,res) { 
-        
         try {
-            var sql = 'SELECT * FROM customer WHERE id = ?';
-            const [rows] = await pool.query(sql,[req.params.id]); 
-
-            if(rows.length < 1) return res.status(404).json({
-                menssage: 'Customer not found'
-
-            });
-            res.send(rows[0]);  
+            const customer = await Customer.getCustomer(req.params.id);
+            res.send(customer);
         } catch (error) {
             return res.status(500).json({
-                message: 'Something goes wrong'
+                message: 'Something goes wrong getting the customer '  + error
             });
-        }  
+        }
 
     },
 

@@ -156,7 +156,7 @@ class OperationReturn  {
     }
 
 
-    static async getWeekReturnPorcentage (inputQuantity, returnQuantity){
+    static getWeekReturnPorcentage (inputQuantity, returnQuantity){
         
         if(returnQuantity > 0){
             return Number(((returnQuantity/inputQuantity)*100).toFixed(2));
