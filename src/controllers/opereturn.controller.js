@@ -1,4 +1,3 @@
-
 import OperationReturn from '../models/opereturn.model.js'
 
 
@@ -70,7 +69,28 @@ const OpeReturn = {
             });
         }
         
-    }
+    },
+
+    getTotalReturnsByName: async function(req,res) { 
+       
+        try{
+          
+            const operationReturns = await OperationReturn.getReturnsQuantityByProductName(req.query.date, req.query.product_name);
+
+            if( operationReturns == null) return res.status(404).json({
+                menssage: 'Returns not found'
+
+            });
+            res.send(operationReturns);
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the returns: ' + error
+            });
+        }
+
+    },
+    
 }
 
 export default OpeReturn

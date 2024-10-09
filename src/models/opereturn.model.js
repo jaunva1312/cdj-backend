@@ -163,6 +163,30 @@ class OperationReturn  {
         }
         return 0
     }
+
+    static async getReturnsQuantityByProductName(date,productName){
+        
+        try {
+            var sql = 
+                `SELECT SUM(hot_return) AS total_hot_return, SUM(cold_return) AS total_cool_return, SUM(poor_condition_return) AS total_poor_condition_return
+                FROM operationreturn
+                WHERE date = ? AND product_name = ?`
+            
+            const [rows] = await pool.query(sql,[
+                date, 
+                productName
+            ]); 
+
+            console.log(rows[0]);
+
+            if(rows.length < 1) return null;
+            
+            return rows[0];  
+
+        } catch (error) {
+            throw(error);
+        }  
+    }
 }
 
 
