@@ -168,7 +168,7 @@ class OperationReturn  {
         
         try {
             var sql = 
-                `SELECT SUM(hot_return) AS total_hot_return, SUM(cold_return) AS total_cool_return, SUM(poor_condition_return) AS total_poor_condition_return
+                `SELECT SUM(hot_return) AS total_hot_return, SUM(cold_return) AS total_cold_return, SUM(poor_condition_return) AS total_poor_condition_return
                 FROM operationreturn
                 WHERE date = ? AND product_name = ?`
             
