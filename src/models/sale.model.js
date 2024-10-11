@@ -6,7 +6,7 @@ class Sale  {
 
     static async getSalesByDateAndProduct(startDate, endDate, productName){
 
-        //console.log(startDate, endDate, productName);
+        console.log(startDate, endDate, productName);
         
         try {
             
@@ -122,7 +122,6 @@ class Sale  {
             });
 
             sales.returnPocentage = sales.totalReturns/sales.totalEntries;
-            //console.log(rows[0]);
             
             return sales;  
 

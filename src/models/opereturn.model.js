@@ -164,20 +164,41 @@ class OperationReturn  {
         return 0
     }
 
-    static async getReturnsQuantityByProductName(date,productName){
-        
+    static async getReturnsQuantityByProductName(date,productName, includePoorConditionReturns){
+
+        var sql = '';
+
         try {
-            var sql = 
-                `SELECT SUM(hot_return) AS total_hot_return, SUM(cold_return) AS total_cold_return, SUM(poor_condition_return) AS total_poor_condition_return
-                FROM operationreturn
-                WHERE date = ? AND product_name = ?`
+            if(includePoorConditionReturns == true){
+   
+                sql = 
+                    `SELECT 
+                        CAST(SUM(IFNULL(hot_return, 0)) AS SIGNED) AS total_hot_return, 
+                        CAST(SUM(IFNULL(cold_return, 0)) AS SIGNED) AS total_cold_return, 
+                        CAST(SUM(IFNULL(poor_condition_return, 0)) AS SIGNED) AS total_poor_condition_return
+                    FROM 
+                        operationreturn
+                    WHERE 
+                        date = ? AND product_name = ?`
+            }else{
+
+                sql =
+                    `SELECT 
+                        CAST(SUM(IFNULL(hot_return, 0)) AS SIGNED) AS total_hot_return, 
+                        CAST(SUM(IFNULL(cold_return, 0)) AS SIGNED) AS total_cold_return
+                    FROM 
+                        operationreturn
+                    WHERE 
+                        date = ? AND product_name = ?`
+            }
             
+
             const [rows] = await pool.query(sql,[
                 date, 
                 productName
             ]); 
 
-            console.log(rows[0]);
+            //console.log(rows[0]);
 
             if(rows.length < 1) return null;
             

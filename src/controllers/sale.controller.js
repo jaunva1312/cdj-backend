@@ -44,6 +44,7 @@ const sale = {
             });
 
             res.send(saleData);  
+
         } catch (error) {
             return res.status(500).json({
                 message: 'Something goes wrong getting the summary of sales information by customer group:, ' + error

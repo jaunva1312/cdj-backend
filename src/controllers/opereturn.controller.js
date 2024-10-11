@@ -72,10 +72,10 @@ const OpeReturn = {
     },
 
     getTotalReturnsByName: async function(req,res) { 
-       
+
         try{
           
-            const operationReturns = await OperationReturn.getReturnsQuantityByProductName(req.query.date, req.query.product_name);
+            const operationReturns = await OperationReturn.getReturnsQuantityByProductName(req.query.date, req.query.product_name, req.query.poor_condition_return);
 
             if( operationReturns == null) return res.status(404).json({
                 menssage: 'Returns not found'
