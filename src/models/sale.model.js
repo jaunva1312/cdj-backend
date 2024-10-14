@@ -47,7 +47,7 @@ class Sale  {
 
     }
 
-    static async getSalesSumaryByCustomeId(startDate, endDate, customerGroupId){
+    static async getSalesSumaryByCustomerId(startDate, endDate, customerGroupId){
 
         
         var sales = {
@@ -129,62 +129,114 @@ class Sale  {
         } 
     }
 
-    static async getSalesDetailsByCustomeId(startDate, endDate, customerGroupId){
-  
+    static async getSalesDetailsByCustomeId(startDate, endDate, customerGroupId, productName){
+        
+        console.log(productName);
         try {
+            if(productName != ''){
+                console.log('Entro');
+                var sql = 
+                    `SELECT 
+
+                        g.name AS route,
+                        i.product_name,
+                        CAST(SUM(IFNULL(i.quantity, 0))as SIGNED) AS total_entries,
+                        CAST((SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))) as SIGNED) AS total_returns,
+                        CAST((SUM(IFNULL(i.quantity, 0)) - 
+                        (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0)))) as SIGNED) AS total,
+                        (IFNULL(p.price, 0)) AS price,
+                        (p.price * (SUM(IFNULL(i.quantity, 0)) - 
+                        (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))))) AS ammount
+
+
+                    FROM 
+                        operationinput i
+                    LEFT JOIN 
+                        operationreturn r 
+                    ON 
+
+                        i.operation_id = r.operation_id
+                        AND i.customer_group_id = r.customer_group_id
+                        AND i.product_id = r.product_id
+
+                    LEFT JOIN 
+                        customergroup g
+                    ON 
+                        i.customer_group_id = g.id
+                    LEFT JOIN 
+                        product p
+                    ON 
+                        i.product_id = p.id_product
+                    WHERE 
+                        i.date BETWEEN ? AND ?
+                        AND i.customer_group_id = ?
+                        AND i.product_name = ?
+                    GROUP BY 
+                        i.customer_group_id,
+                        i.product_id,
+                        i.product_name,
+                        p.price
+                        
+                    ORDER BY
+                        g.name,
+                        p.view_order;`
+            }
+            else{
+                console.log('NO entro');
+                var sql = 
+                    `SELECT 
+
+                        g.name AS route,
+                        i.product_name,
+                        CAST(SUM(IFNULL(i.quantity, 0))as SIGNED) AS total_entries,
+                        CAST((SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))) as SIGNED) AS total_returns,
+                        CAST((SUM(IFNULL(i.quantity, 0)) - 
+                        (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0)))) as SIGNED) AS total,
+                        (IFNULL(p.price, 0)) AS price,
+                        (p.price * (SUM(IFNULL(i.quantity, 0)) - 
+                        (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))))) AS ammount
+
+
+                    FROM 
+                        operationinput i
+                    LEFT JOIN 
+                        operationreturn r 
+                    ON 
+
+                        i.operation_id = r.operation_id
+                        AND i.customer_group_id = r.customer_group_id
+                        AND i.product_id = r.product_id
+
+                    LEFT JOIN 
+                        customergroup g
+                    ON 
+                        i.customer_group_id = g.id
+                    LEFT JOIN 
+                        product p
+                    ON 
+                        i.product_id = p.id_product
+                    WHERE 
+                        i.date BETWEEN ? AND ?
+                        AND i.customer_group_id = ?
+                    GROUP BY 
+                        i.customer_group_id,
+                        i.product_id,
+                        i.product_name,
+                        p.price
+                        
+                    ORDER BY
+                        g.name,
+                        p.view_order;`
+            }
             
-            var sql = 
-            `SELECT 
-
-                g.name AS route,
-                i.product_name,
-                CAST(SUM(IFNULL(i.quantity, 0))as SIGNED) AS total_entries,
-                CAST((SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))) as SIGNED) AS total_returns,
-                CAST((SUM(IFNULL(i.quantity, 0)) - 
-                (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0)))) as SIGNED) AS total,
-                (IFNULL(p.price, 0)) AS price,
-                (p.price * (SUM(IFNULL(i.quantity, 0)) - 
-                (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))))) AS ammount
-
-
-            FROM 
-                operationinput i
-            LEFT JOIN 
-                operationreturn r 
-            ON 
-
-                i.operation_id = r.operation_id
-                AND i.customer_group_id = r.customer_group_id
-                AND i.product_id = r.product_id
-
-            LEFT JOIN 
-                customergroup g
-            ON 
-                i.customer_group_id = g.id
-            LEFT JOIN 
-                product p
-            ON 
-                i.product_id = p.id_product
-            WHERE 
-                i.date BETWEEN ? AND ?
-                AND i.customer_group_id = ?
-            GROUP BY 
-                i.customer_group_id,
-                i.product_id,
-                i.product_name,
-                p.price
-                
-            ORDER BY
-                g.name,
-                p.view_order;`
             
             const [rows] = await pool.query(sql,[
                 startDate, 
                 endDate,
-                customerGroupId
+                customerGroupId,
+                productName
             ]);
 
-            console.log(rows);
 
             if(rows.length < 1) return null;
             
