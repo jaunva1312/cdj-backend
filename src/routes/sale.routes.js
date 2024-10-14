@@ -7,6 +7,8 @@ router.get('/salesbyproduct/', Sale.getSalesByProduct);
 
 router.get('/salesbycustomergroup/', Sale.getSalesSumaryByCustomerGroup);
 
+router.get('/salesdetailsbycustomergroup/', Sale.getSalesDetailsByCustomerGroup);
+
 
 
 export default router
