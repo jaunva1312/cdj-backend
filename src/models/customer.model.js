@@ -8,7 +8,7 @@ class Customer  {
         
         try {
             
-            var sql = `SELECT * FROM customer`
+            var sql = `SELECT * FROM customer ORDER BY customer_group_id, delivery_order`
             
             const [rows] = await pool.query(sql); 
 
@@ -26,7 +26,7 @@ class Customer  {
         
         try {
             
-            var sql = 'SELECT * FROM customer WHERE customer_group_id = ? ORDER BY delivery_order ';
+            var sql = 'SELECT * FROM customer WHERE customer_group_id = ? ORDER BY customer_group_id,delivery_order ';
             
             const [rows] = await pool.query(sql,[customerGroupId]); 
 
