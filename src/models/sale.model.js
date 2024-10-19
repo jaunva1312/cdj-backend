@@ -101,8 +101,7 @@ class Sale  {
                 p.price
                 
             ORDER BY
-                g.name
-                p.view_order;`
+                g.name;`
             
             const [rows] = await pool.query(sql,[
                 startDate, 
