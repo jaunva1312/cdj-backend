@@ -63,8 +63,6 @@ class Product  {
         try{
 
             productRawObject.id_product = createUniqueID();
-
-            console.log(productRawObject);
             
             var sql = `INSERT INTO product(
                 id_product,
@@ -156,7 +154,7 @@ class Product  {
             var sqlConsult = 'SELECT * FROM product WHERE id_product = ?';
 
 
-            const { 
+            let { 
                 view_order,
                 name,
                 short_name,
@@ -174,6 +172,12 @@ class Product  {
                 is_for_public_sales
             } = productObject
 
+            if(productObject.images && productObject.images != undefined){
+                productObject.images.toString();
+            }
+
+            console.log(images);
+
             const [result] = await pool.query(sql,[
                 view_order,
                 name,
@@ -186,7 +190,7 @@ class Product  {
                 id_supplier,
                 elaboration_date,
                 expiration_date,
-                images.toString(),
+                images,
                 is_available,
                 is_for_route_sales,
                 is_for_public_sales,id
