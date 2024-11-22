@@ -47,7 +47,7 @@ class Sale  {
 
     }
 
-    static async getSalesSumaryByCustomerId(startDate, endDate, customerGroupId){
+    static async getSalesSumaryByCustomerGroudId(startDate, endDate, customerGroupId){
 
         
         var sales = {
@@ -61,28 +61,44 @@ class Sale  {
             
             var sql = 
             `SELECT 
-
                 g.name AS route,
                 i.product_name,
-                CAST(SUM(IFNULL(i.quantity, 0))as SIGNED) AS total_entries,
-                CAST((SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))) as SIGNED) AS total_returns,
-                CAST((SUM(IFNULL(i.quantity, 0)) - 
-                (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0)))) as SIGNED) AS total,
-                (IFNULL(p.price, 0)) AS price,
-                (p.price * (SUM(IFNULL(i.quantity, 0)) - 
-                (SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))))) AS ammount
-
-
+                CAST(SUM(IFNULL(i.quantity, 0)) AS SIGNED) AS total_entries,
+                CAST(
+                    CASE 
+                        WHEN i.product_id = '0f0221fd' THEN 
+                            SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))
+                        ELSE 
+                            SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))
+                    END AS SIGNED
+                ) AS total_returns,
+                CAST(
+                    SUM(IFNULL(i.quantity, 0)) - 
+                    CASE 
+                        WHEN i.product_id = '0f0221fd' THEN 
+                            SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))
+                        ELSE 
+                            SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))
+                    END AS SIGNED
+                ) AS total,
+                IFNULL(p.price, 0) AS price,
+                (p.price * 
+                    (SUM(IFNULL(i.quantity, 0)) - 
+                    CASE 
+                        WHEN i.product_id = '0f0221fd' THEN 
+                            SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))
+                        ELSE 
+                            SUM(IFNULL(r.hot_return, 0)) + SUM(IFNULL(r.cold_return, 0)) + SUM(IFNULL(r.poor_condition_return, 0))
+                    END)
+                ) AS ammount
             FROM 
                 operationinput i
             LEFT JOIN 
                 operationreturn r 
             ON 
-
                 i.operation_id = r.operation_id
                 AND i.customer_group_id = r.customer_group_id
                 AND i.product_id = r.product_id
-
             LEFT JOIN 
                 customergroup g
             ON 
@@ -99,7 +115,6 @@ class Sale  {
                 i.product_id,
                 i.product_name,
                 p.price
-                
             ORDER BY
                 g.name;`
             
