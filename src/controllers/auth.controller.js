@@ -12,7 +12,10 @@ export const signUp = async (req,res) => {
 
     try{
 
-        const newUser = await User.createUser(req.body);
+        const userFound = await User.findByUserName(req.body.user_name);
+
+        if(userFound != null) return res.status(401).json({message:"User already exist"});
+        
 
         //Create token
         const token = jwt.sign({id: newUser.userID}, config.SECRET);
@@ -27,7 +30,7 @@ export const signUp = async (req,res) => {
         //Send response
         res.status(200).json({
             token: token,
-            user_name: userFound.userName,
+            user_name: newUser.userName,
             roles:userFound.roles
         });
 
