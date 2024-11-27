@@ -14,8 +14,9 @@ export const signUp = async (req,res) => {
 
         const userFound = await User.findByUserName(req.body.user_name);
 
-        if(userFound != null) return res.status(401).json({message:"User already exist"});
-        
+        if(userFound != null) return res.status(401).json({message:"User not found"});
+
+        const newUser = await User.createUser(req.body);
 
         //Create token
         const token = jwt.sign({id: newUser.userID}, config.SECRET);
