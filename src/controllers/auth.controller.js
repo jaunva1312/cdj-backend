@@ -28,7 +28,7 @@ export const signUp = async (req,res) => {
         res.status(200).json({
             token: token,
             user_name: newUser.userName,
-            roles:userFound.roles
+            roles: newUser.roles
         });
 
             
