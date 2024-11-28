@@ -95,8 +95,6 @@ class Product  {
                 public_price,
                 cost,
                 id_supplier,
-                elaboration_date,
-                expiration_date,
                 images, 
                 is_available,
                 is_for_route_sales,
@@ -114,8 +112,6 @@ class Product  {
                 public_price,
                 cost,
                 id_supplier,
-                elaboration_date,
-                expiration_date,
                 images, 
                 is_available,
                 is_for_route_sales,
@@ -133,8 +129,6 @@ class Product  {
                 public_price,
                 cost,
                 id_supplier,
-                elaboration_date,
-                expiration_date,
                 images, 
                 is_available,
                 is_for_route_sales,
@@ -163,8 +157,6 @@ class Product  {
                 public_price = IFNULL(?,public_price),
                 cost = IFNULL(?,cost),
                 id_supplier = IFNULL(?,id_supplier),
-                elaboration_date = IFNULL(?,elaboration_date),
-                expiration_date = IFNULL(?,expiration_date),
                 images = IFNULL(?,images),
                 is_available = IFNULL(?,is_available),
                 is_for_route_sales = IFNULL(?,is_for_route_sales),
@@ -184,8 +176,6 @@ class Product  {
                 public_price,
                 cost,
                 id_supplier,
-                elaboration_date,
-                expiration_date,
                 images, 
                 is_available,
                 is_for_route_sales,
@@ -196,7 +186,7 @@ class Product  {
                 productObject.images.toString();
             }
 
-            console.log(images);
+            //console.log(images);
 
             const [result] = await pool.query(sql,[
                 view_order,
@@ -208,8 +198,6 @@ class Product  {
                 public_price,
                 cost,
                 id_supplier,
-                elaboration_date,
-                expiration_date,
                 images,
                 is_available,
                 is_for_route_sales,
