@@ -19,10 +19,6 @@ class Product  {
             const [rows] = await pool.query(sql); 
 
             if(rows.length < 1) return null;
-
-            rows.forEach(rawUser =>{
-                users.push(this.castUserModel(rawUser));
-            });
             
             return rows;  
 
