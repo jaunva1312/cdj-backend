@@ -4,19 +4,43 @@ import moment from 'moment';
 
 class Product  {
 
-    static async getProducts(){
+    static async getProducts(isForRouteSales){
+
+        
         
         try {
+
+            if(isForRouteSales != null){
+                var sql = `
+                    SELECT 
+                        product.*, product_group.product_group_name, product_category.product_category_name, supplier.supplier_name 
+                    FROM 
+                        product
+                    LEFT JOIN product_group 
+                    ON product.id_product_group = product_group.id_product_group
+                    LEFT JOIN product_category
+                    ON product.id_product_category = product_category.id_product_category
+                    LEFT JOIN supplier
+                    ON product.id_supplier = supplier.id_supplier
+                    WHERE
+                        is_for_route_sales = ?
+                    ORDER BY view_order`;
+    
+            }
+            else{
+                var sql = `SELECT product.*, product_group.product_group_name, product_category.product_category_name, supplier.supplier_name FROM product
+                    LEFT JOIN product_group 
+                    ON product.id_product_group = product_group.id_product_group
+                    LEFT JOIN product_category
+                    ON product.id_product_category = product_category.id_product_category
+                    LEFT JOIN supplier
+                    ON product.id_supplier = supplier.id_supplier
+                    ORDER BY view_order`;
+            }
             
-            var sql = `SELECT product.*, product_group.product_group_name, product_category.product_category_name, supplier.supplier_name FROM product
-                LEFT JOIN product_group 
-                ON product.id_product_group = product_group.id_product_group
-                LEFT JOIN product_category
-                ON product.id_product_category = product_category.id_product_category
-                LEFT JOIN supplier
-                ON product.id_supplier = supplier.id_supplier`
             
-            const [rows] = await pool.query(sql); 
+            
+            const [rows] = await pool.query(sql,[isForRouteSales]); 
 
             if(rows.length < 1) return null;
             

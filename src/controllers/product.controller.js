@@ -6,7 +6,7 @@ const product = {
     
     getProducts: async function(req,res) {
         try {
-            const products = await Product.getProducts();
+            const products = await Product.getProducts(req.query.is_for_route_sales);
             res.send(products);
         } catch (error) {
             return res.status(500).json({
