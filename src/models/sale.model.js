@@ -148,7 +148,7 @@ class Sale  {
         console.log(productName);
         try {
             if(productName != ''){
-                console.log('Entro');
+
                 var sql = 
                     `SELECT 
 
@@ -196,7 +196,6 @@ class Sale  {
                         p.view_order;`
             }
             else{
-                console.log('NO entro');
                 var sql = 
                     `SELECT 
 
