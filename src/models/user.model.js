@@ -6,6 +6,7 @@ import {pool} from '../db.js'
 class User {
 
     constructor(userName, password) {
+        
       this._userID = createUniqueID();
       this._userName = userName;
       this._name = '';

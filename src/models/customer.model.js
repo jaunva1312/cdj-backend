@@ -58,8 +58,6 @@ class Customer  {
     }
 
     static async createCustomer(customerRawObject) {
-
-        console.log(customerRawObject);
             
         try {
 
@@ -95,8 +93,6 @@ class Customer  {
                 is_enable) 
                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
             
-            var sqlConsult = 'SELECT * FROM customer WHERE id = ?';
-
             //Inser new customer
             const {
                 id,

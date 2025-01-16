@@ -5,12 +5,13 @@ const router = Router()
 
 router.get('/customersgroups',CustomersGroup.getCustomersGroups);
 
-router.get('/customersgroup/:id',CustomersGroup.getCustomersGroup);
+router.get('/customergroup/:id',CustomersGroup.getCustomerGroup);
 
-router.post('/customersgroup', CustomersGroup.createCustomersGroup);
+router.post('/customergroup', CustomersGroup.createCustomerGroup);
 
-router.put('/customersgroup', CustomersGroup.updateCustomersGroup);
+router.patch('/customergroup/:id', CustomersGroup.updateCustomerGroup);
 
-router.delete('/customersgroup', CustomersGroup.deleteCustomersGroup);
+router.delete('/customergroup/:id', CustomersGroup.deleteCustomerGroup);
+
 
 export default router
