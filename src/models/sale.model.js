@@ -4,6 +4,137 @@ import moment from 'moment';
 
 class Sale  {
 
+    static async getSaleById(id){
+        
+        try {
+            var sql = 'SELECT * FROM sale WHERE id_sale = ?';
+            
+            const [rows] = await pool.query(sql,[id]); 
+
+            if(rows.length < 1) return null;
+            
+            return rows[0];  
+
+        } catch (error) {
+            throw(error);
+        }  
+    }
+
+    static async createSale(saleRawObject){
+
+        try{
+
+            saleRawObject.id_sale = createUniqueID();
+            saleRawObject.created_at =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+            
+            var sql = `INSERT INTO sale(
+                id_sale,  
+                created_at,
+                date,
+                created_by, 
+                customer_id, 
+                ammount, 
+                pyment_method,
+                sale_type,
+                sale_status) 
+                VALUES(?,?,?,?,?,?,?,?,?)`;
+
+            const {
+                id_sale,
+                created_at,
+                date,
+                created_by, 
+                customer_id, 
+                ammount, 
+                pyment_method,
+                sale_type,
+                sale_status
+            } = saleRawObject
+        
+            const [rows] = await pool.query(sql,[
+                id_sale,
+                created_at,
+                date,
+                created_by,
+                customer_id,
+                ammount, 
+                pyment_method,
+                sale_type,
+                sale_status
+            ]);
+
+            return saleRawObject;
+            
+
+        }catch(error){
+            throw(error);
+        }
+    }
+
+    static async updateSale(saleObject, id){
+
+        try {
+
+            var sql = `UPDATE sale SET
+                date = IFNULL(?,date),
+                created_by = IFNULL(?,created_by), 
+                customer_id = IFNULL(?,customer_id), 
+                ammount = IFNULL(?,ammount), 
+                pyment_method = IFNULL(?,pyment_method), 
+                sale_type = IFNULL(?,sale_type), 
+                sale_status = IFNULL(?,sale_status)
+                WHERE id_sale = ?`;
+
+            var sqlConsult = 'SELECT * FROM sale WHERE id_sale = ?';
+
+
+            const {
+
+                date,
+                created_by,
+                customer_id,
+                ammount, 
+                pyment_method,
+                sale_type,
+                sale_status
+            } = saleObject
+
+            const [result] = await pool.query(sql,[
+                date,
+                created_by,
+                customer_id,
+                ammount, 
+                pyment_method,
+                sale_type,
+                sale_status,id
+            ]);
+
+    
+            if(result.affectedRows == 0) throw ("Sale not found");
+
+            const [rows] = await pool.query(sqlConsult,[id]);
+
+            return rows[0];
+
+        } catch (error) {
+            throw(error);
+        }
+
+    }
+
+    static async deleteSale(id){
+        
+        try {
+            var sql = 'DELETE FROM sale WHERE id_sale = ?'
+            const [result] = await pool.query(sql,[id]); 
+
+            return result.affectedRows;
+
+        } catch (error) {
+            throw (error);
+        }
+    }
+
     static async getSalesByDateAndProduct(startDate, endDate, productName){
 
         try {

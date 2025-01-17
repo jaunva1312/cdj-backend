@@ -70,10 +70,10 @@ export const login = async (req,res) => {
         //Send response
         res.status(200).json({
             token: token,
-            user_name: newUser.userName,
-            name: newUser.name,
-            roles: newUser.roles,
-            customer_group: newUser.customerGroupID
+            user_name: userFound.userName,
+            name: userFound.name,
+            roles: userFound.roles,
+            customer_group: userFound.customerGroupID
         });
         
         
