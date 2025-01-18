@@ -375,6 +375,54 @@ class Sale  {
             throw(error);
         } 
     }
+
+    static async getSalesByWeek(year, customerGroupName){
+        
+        try {
+            if(productName != ''){
+
+                var sql = 
+                    `
+                    SELECT 
+                        customergroup.name as customer_group_name,
+                        YEAR(operation.date) as year,
+                        WEEK(operation.created_at) as week, 
+                        CAST(SUM(IFNULL(subtotal, 0))as SIGNED) as sales
+
+                    FROM
+                        operation 
+
+                    LEFT JOIN 
+                        customergroup 
+                    ON 
+                        operation.customer_group_id = customergroup.id
+                    WHERE
+                        customergroup.name = ? AND YEAR(operation.date) = ?
+                    GROUP BY 
+                        customer_group_id, year_, week  
+                    ORDER BY 
+                        year, week DESC;
+                    `
+            }
+            
+            
+            
+            const [rows] = await pool.query(sql,[
+                year, 
+                customerGroupName
+            ]);
+
+
+            if(rows.length < 1) return null;
+            
+            return rows;  
+
+        } catch (error) {
+            throw(error);
+        } 
+    }
+
+    
     
     
     

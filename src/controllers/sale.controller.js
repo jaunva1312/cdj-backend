@@ -135,6 +135,35 @@ const sale = {
         }
 
     },
+
+    getSalesByWeek: async function(req,res) {
+        let saleData;
+
+        try {
+
+            if(req.query.year != '' && req.customer_group_name != ''){
+
+                saleData = await Sale.getSalesDetailsByCustomeId(req.query.start_date, req.query.end_date, req.query.customer_group_id, req.query.product_name);
+            }else{
+                return res.status(500).json({
+                    message: 'Querey parameters year and customerGroupName are required'
+                });
+            }
+            
+            if(saleData == null) return res.status(404).json({
+                menssage: 'Sales information not found'
+
+            });
+
+            res.send(saleData);  
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the sales information by week:, ' + error
+            });
+        }
+
+    },
     
 
 }
