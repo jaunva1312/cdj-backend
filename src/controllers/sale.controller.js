@@ -143,10 +143,10 @@ const sale = {
 
             if(req.query.year != '' && req.customer_group_name != ''){
 
-                saleData = await Sale.getSalesDetailsByCustomeId(req.query.start_date, req.query.end_date, req.query.customer_group_id, req.query.product_name);
+                saleData = await Sale.getSalesByWeek(req.query.year, req.query.customer_group_name);
             }else{
                 return res.status(500).json({
-                    message: 'Querey parameters year and customerGroupName are required'
+                    message: 'Querey parameters year and customer_group_name are required'
                 });
             }
             

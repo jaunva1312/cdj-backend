@@ -397,7 +397,7 @@ class Sale  {
                     ON 
                         operation.customer_group_id = customergroup.id
                     WHERE
-                        customergroup.name = ? AND YEAR(operation.date) = ?
+                        YEAR(operation.date) = ? AND customergroup.name = ?
                     GROUP BY 
                         customer_group_id, year_, week  
                     ORDER BY 
