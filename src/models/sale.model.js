@@ -398,10 +398,10 @@ class Sale  {
                 WHERE
                     YEAR(operation.date) = ? AND customergroup.name = ?
                 GROUP BY 
-                    customer_group_id, year_, week  
+                    customer_group_id, year, week  
                 ORDER BY 
                     year, week DESC;
-                    
+
                 `
             
             const [rows] = await pool.query(sql,[
