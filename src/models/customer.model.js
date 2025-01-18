@@ -8,7 +8,14 @@ class Customer  {
         
         try {
             
-            var sql = `SELECT * FROM customer ORDER BY customer_group_id, delivery_order`
+            var sql = `
+                SELECT 
+                    customer.*, customergroup.name as customer_group_name
+                FROM 
+                    customer
+                LEFT JOIN customergroup 
+                ON customer.customer_group_id = customergroup.id
+                ORDER BY customer_group_id, delivery_order`
             
             const [rows] = await pool.query(sql); 
 
