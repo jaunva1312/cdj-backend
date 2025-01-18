@@ -379,33 +379,30 @@ class Sale  {
     static async getSalesByWeek(year, customerGroupName){
         
         try {
-            if(productName != ''){
-
-                var sql = 
-                    `
-                    SELECT 
-                        customergroup.name as customer_group_name,
-                        YEAR(operation.date) as year,
-                        WEEK(operation.created_at) as week, 
-                        CAST(SUM(IFNULL(subtotal, 0))as SIGNED) as sales
-
-                    FROM
-                        operation 
-
-                    LEFT JOIN 
-                        customergroup 
-                    ON 
-                        operation.customer_group_id = customergroup.id
-                    WHERE
-                        YEAR(operation.date) = ? AND customergroup.name = ?
-                    GROUP BY 
-                        customer_group_id, year_, week  
-                    ORDER BY 
-                        year, week DESC;
-                    `
-            }
             
-            
+            var sql = 
+                `
+                SELECT 
+                    customergroup.name as customer_group_name,
+                    YEAR(operation.date) as year,
+                    WEEK(operation.created_at) as week, 
+                    CAST(SUM(IFNULL(subtotal, 0))as SIGNED) as sales
+
+                FROM
+                    operation 
+
+                LEFT JOIN 
+                    customergroup 
+                ON 
+                    operation.customer_group_id = customergroup.id
+                WHERE
+                    YEAR(operation.date) = ? AND customergroup.name = ?
+                GROUP BY 
+                    customer_group_id, year_, week  
+                ORDER BY 
+                    year, week DESC;
+                    
+                `
             
             const [rows] = await pool.query(sql,[
                 year, 
