@@ -15,7 +15,8 @@ class Customer  {
                     customer
                 LEFT JOIN customergroup 
                 ON customer.customer_group_id = customergroup.id
-                ORDER BY customer_group_id, delivery_order`
+                WHERE customer.customer_group_id <> "2e9029d0"
+                ORDER BY customergroup.name, delivery_order`
             
             const [rows] = await pool.query(sql); 
 
