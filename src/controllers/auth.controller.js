@@ -73,7 +73,7 @@ export const login = async (req,res) => {
             user_name: userFound.userName,
             name: userFound.name,
             roles: userFound.roles,
-            customer_group: userFound.customerGroupID
+            customer_group_id: userFound.customerGroupID
         });
         
         
