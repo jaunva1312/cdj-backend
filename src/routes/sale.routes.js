@@ -3,6 +3,8 @@ import Sale from '../controllers/sale.controller.js'
 
 const router = Router()
 
+router.get('/sales',Sale.getSales);
+
 router.get('/sale/:id',Sale.getSale);
 
 router.post('/sale', Sale.createSale);

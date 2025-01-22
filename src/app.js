@@ -14,6 +14,7 @@ import productGroupRoutes from './routes/productgroup.routes.js'
 import warehouse from './routes/warehouse.routes.js'
 import movement from './routes/movement.routes.js'
 import sale from './routes/sale.routes.js'
+import saleDelivery from "./routes/saledelivery.routes.js";
 import authRoutes from './routes/auth.routes.js'
 
 
@@ -46,6 +47,7 @@ app.use('/api',productGroupRoutes);
 app.use('/api',warehouse);
 app.use('/api',movement);
 app.use('/api/',sale);
+app.use('/api/',saleDelivery);
 app.use('/api/auth',authRoutes);
 app.use('/api/images',express.static('photos'));
 

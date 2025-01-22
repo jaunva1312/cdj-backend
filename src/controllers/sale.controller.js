@@ -3,6 +3,35 @@ import Sale from '../models/sale.model.js'
 
 const sale = {
 
+    getSales: async function(req,res) {
+        let sales;
+
+        try {
+
+            if(req.query.start_date != '' && req.query.end_date != '' && req.query.customer_group_id != ''){
+
+                sales = await Sale.getSales(req.query.start_date, req.query.end_date, req.query.customer_group_id);
+            }else{
+                return res.status(500).json({
+                    message: 'Query parameters start_date, end_date and customer_group_id are required'
+                });
+            }
+            
+            if(sales == null) return res.status(404).json({
+                menssage: 'Sales information not found'
+
+            });
+
+            res.send(sales);  
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the sales:, ' + error
+            });
+        }
+
+    },
+
     getSale: async function (req,res){
         try {
             const sale = await Sale.getSaleById(req.params.id);
@@ -146,7 +175,7 @@ const sale = {
                 saleData = await Sale.getSalesByWeek(req.query.year, req.query.customer_group_name);
             }else{
                 return res.status(500).json({
-                    message: 'Querey parameters year and customer_group_name are required'
+                    message: 'Query parameters year and customer_group_name are required'
                 });
             }
             

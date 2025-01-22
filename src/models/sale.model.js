@@ -1,19 +1,80 @@
 import {createUniqueID} from '../libs/dataBase.js'
+import SaleDelivery from '../models/saledelivery.model.js'
 import {pool} from '../db.js'
 import moment from 'moment';
 
 class Sale  {
 
-    static async getSaleById(id){
-        
+    static async getSales(start_date, end_date, customer_group_id){
+
+        var saleObjects;
+
         try {
-            var sql = 'SELECT * FROM sale WHERE id_sale = ?';
             
-            const [rows] = await pool.query(sql,[id]); 
+            var sql =
+            `
+            SELECT 
+                    sale.*, 
+                    customergroup.name as customer_group_name,
+                    customer.name as customer_name
+
+                FROM
+                    sale
+
+                LEFT JOIN 
+                    customer 
+                ON 
+                    sale.customer_id = customer.id
+
+                LEFT JOIN 
+                    customergroup 
+                ON 
+                    sale.customer_group_id = customergroup.id
+                WHERE
+                    DATE(sale.created_at) BETWEEN ? AND ?
+                    AND sale.customer_group_id = ?
+            `;
+
+            
+
+            const [rows] = await pool.query(sql,[
+                start_date, 
+                end_date,
+                customer_group_id,
+   
+            ]); 
+
 
             if(rows.length < 1) return null;
             
-            return rows[0];  
+            saleObjects = rows;
+            for await (let obj of saleObjects){
+               obj.sales_deliveries = await SaleDelivery.getSalesDeliveries(obj.id_sale);
+            }
+
+            return saleObjects;
+            
+
+        } catch (error) {
+            throw(error);
+        } 
+
+    }
+
+    static async getSaleById(id){
+        
+        try {
+            var saleObj;
+            var sql = 'SELECT * FROM sale WHERE id_sale = ?';
+                        
+            const [rows] = await pool.query(sql,[id]); 
+
+            if(rows.length < 1) return null;
+
+            saleObj = rows[0];
+            saleObj.sales_deliveries = await SaleDelivery.getSalesDeliveries(saleObj.id_sale);
+            
+            return saleObj;
 
         } catch (error) {
             throw(error);
@@ -24,15 +85,15 @@ class Sale  {
 
         try{
 
-            saleRawObject.id_sale = createUniqueID();
+            //saleRawObject.id_sale = createUniqueID();
             saleRawObject.created_at =  new Date().toISOString().slice(0, 19).replace('T', ' ');
             
             var sql = `INSERT INTO sale(
                 id_sale,  
                 created_at,
-                date,
                 created_by, 
-                customer_id, 
+                customer_id,
+                customer_group_id,
                 ammount, 
                 pyment_method,
                 sale_type,
@@ -42,9 +103,9 @@ class Sale  {
             const {
                 id_sale,
                 created_at,
-                date,
                 created_by, 
-                customer_id, 
+                customer_id,
+                customer_group_id,
                 ammount, 
                 pyment_method,
                 sale_type,
@@ -54,9 +115,9 @@ class Sale  {
             const [rows] = await pool.query(sql,[
                 id_sale,
                 created_at,
-                date,
                 created_by,
                 customer_id,
+                customer_group_id,
                 ammount, 
                 pyment_method,
                 sale_type,
@@ -76,9 +137,8 @@ class Sale  {
         try {
 
             var sql = `UPDATE sale SET
-                date = IFNULL(?,date),
-                created_by = IFNULL(?,created_by), 
-                customer_id = IFNULL(?,customer_id), 
+                customer_id = IFNULL(?,customer_id),
+                customer_group_id = IFNULL(?,customer_group_id), 
                 ammount = IFNULL(?,ammount), 
                 pyment_method = IFNULL(?,pyment_method), 
                 sale_type = IFNULL(?,sale_type), 
@@ -89,10 +149,8 @@ class Sale  {
 
 
             const {
-
-                date,
-                created_by,
                 customer_id,
+                customer_group_id,
                 ammount, 
                 pyment_method,
                 sale_type,
@@ -100,9 +158,8 @@ class Sale  {
             } = saleObject
 
             const [result] = await pool.query(sql,[
-                date,
-                created_by,
                 customer_id,
+                customer_group_id,
                 ammount, 
                 pyment_method,
                 sale_type,
