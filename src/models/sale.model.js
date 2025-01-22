@@ -85,8 +85,7 @@ class Sale  {
 
         try{
 
-            //saleRawObject.id_sale = createUniqueID();
-            saleRawObject.created_at =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+            //saleRawObject.created_at =  new Date().toISOString().slice(0, 19).replace('T', ' ');
             
             var sql = `INSERT INTO sale(
                 id_sale,  

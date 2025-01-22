@@ -66,12 +66,11 @@ class SaleDelivery  {
 
     static async createSaleDelivery(saleDeliveryObject){
 
-        console.log('Llego al model');
 
         try{
 
-            saleDeliveryObject.id_saledelivery = createUniqueID();
-            saleDeliveryObject.date = moment().format('YYYY/MM/DD');
+            //saleDeliveryObject.id_saledelivery = createUniqueID();
+            //saleDeliveryObject.date = moment().local().format('YYYY/MM/DD');
             
             var sql = `INSERT INTO sale_delivery(
                 id_saledelivery,  
