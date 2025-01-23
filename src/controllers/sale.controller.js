@@ -59,7 +59,9 @@ const sale = {
             
             newSale.sales_deliveries = newSalesDeliveries;
             */
-            res.send(req.body.id_sale);
+            res.send({
+                message: req.body.id_sale
+            });
         } catch (error) {
             return res.status(500).json({
                 message: 'Something goes wrong creating the sale: '  + error
