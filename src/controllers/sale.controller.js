@@ -47,13 +47,15 @@ const sale = {
     createSale: async function (req,res) {
         const newSalesDeliveries = [];
         const salesDeliveries = req.body.sales_deliveries;
-        //const saleId = req.body.id_sale;
+        const saleId = req.body.id_sale;
         try {
             const newSale = await Sale.createSale(req.body);
+            
             for await (let saleDelivery of salesDeliveries){
-                //saleDelivery.id = saleId;
+                saleDelivery.id = saleId;
                 newSalesDeliveries.push (await SaleDelivery.createSaleDelivery(saleDelivery));
             }
+        
             newSale.sales_deliveries = newSalesDeliveries;
 
             res.send(newSale);

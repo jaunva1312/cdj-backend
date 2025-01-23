@@ -46,8 +46,6 @@ const saleDelivery = {
     createSalesDeliveries: async function (req,res) {
         const newSalesDeliveries = [];
         const bodies = req.body;
-
-        //console.log(req.body);
         
         try {
             for await (let obj of bodies){
