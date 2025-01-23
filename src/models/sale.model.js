@@ -33,6 +33,8 @@ class Sale  {
                 WHERE
                     DATE(sale.created_at) BETWEEN ? AND ?
                     AND sale.customer_group_id = ?
+                
+                ORDER BY sale.created_at DESC;
             `;
 
             
