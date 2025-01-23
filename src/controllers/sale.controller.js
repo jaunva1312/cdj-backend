@@ -49,7 +49,7 @@ const sale = {
         const salesDeliveries = req.body.sales_deliveries;
         const saleId = req.body.id_sale;
         try {
-            //const newSale = await Sale.createSale(req.body);
+            let newSale = await Sale.createSale(req.body);
             
             /*
             for await (let saleDelivery of salesDeliveries){
@@ -59,9 +59,7 @@ const sale = {
             
             newSale.sales_deliveries = newSalesDeliveries;
             */
-            res.send({
-                message: req.body
-            });
+            res.send(newSale);
         } catch (error) {
             return res.status(500).json({
                 message: 'Something goes wrong creating the sale: '  + error
