@@ -60,7 +60,7 @@ const sale = {
             newSale.sales_deliveries = newSalesDeliveries;
             */
             res.send({
-                message: req.body.id_sale
+                message: req.body
             });
         } catch (error) {
             return res.status(500).json({
