@@ -58,7 +58,7 @@ class Customer  {
 
             if(rows.length < 1) return null;
             
-            return rows;  
+            return rows[0];  
 
         } catch (error) {
             throw(error);

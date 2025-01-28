@@ -1,7 +1,6 @@
 import {createUniqueID} from '../libs/dataBase.js'
 import SaleDelivery from '../models/saledelivery.model.js'
 import {pool} from '../db.js'
-import moment from 'moment';
 
 class Sale  {
 
@@ -87,8 +86,6 @@ class Sale  {
 
         try{
 
-            //saleRawObject.created_at =  new Date().toISOString().slice(0, 19).replace('T', ' ');
-            
             var sql = `INSERT INTO sale(
                 id_sale,  
                 created_at,
