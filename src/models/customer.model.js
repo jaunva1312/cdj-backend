@@ -186,7 +186,8 @@ class Customer  {
 
 
             const {
-                customer_group_id, 
+                customer_group_id,
+                rating,
                 delivery_order, 
                 name, 
                 alias, 
@@ -206,7 +207,8 @@ class Customer  {
             } = modifiedCustomerObject
 
             const [result] = await pool.query(sql, [
-                customer_group_id, 
+                customer_group_id,
+                rating, 
                 delivery_order, 
                 name, 
                 alias, 
