@@ -5,7 +5,7 @@ import  {authJwt}  from '../middlewares/index.js'
 
 const router = Router()
 
-router.get('/customers', [authJwt.verifyToken, authJwt.isAdmin], Customer.getCustomers);
+router.get('/customers', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.getCustomers);
 
 router.get('/customer/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.getCustomer);
 
