@@ -163,6 +163,7 @@ class Customer  {
 
             var sql = `UPDATE customer SET
                 customer_group_id = IFNULL(?,customer_group_id), 
+                rating = IFNULL(?,rating),
                 delivery_order = IFNULL(?,delivery_order),
                 name = IFNULL(?,name),
                 alias = IFNULL(?,alias), 
