@@ -7,13 +7,13 @@ const router = Router()
 
 router.get('/customers', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.getCustomers);
 
-router.get('/customer/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.getCustomer);
+router.get('/customer/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor], Customer.getCustomer);
 
-router.get('/customersByGroup/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.getCustomersByGroup);
+router.get('/customersByGroup/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor], Customer.getCustomersByGroup);
 
 router.get('/customers/nearest-customer/:lat/:long', Customer.getNearestSellPoint);
 
-router.post('/customer', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor, authJwt.isAdmin], Customer.createCustomer);
+router.post('/customer', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor], Customer.createCustomer);
 
 router.patch('/customer/:id', authJwt.verifyToken, Customer.updateCustomer);
 
