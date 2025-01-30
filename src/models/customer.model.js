@@ -34,7 +34,30 @@ class Customer  {
         
         try {
             
-            var sql = 'SELECT * FROM customer WHERE customer_group_id = ? ORDER BY customer_group_id,delivery_order ';
+            var sql = 
+        //    `SELECT * 
+        //     FROM 
+        //         customer 
+        //     WHERE 
+        //         customer_group_id = ? 
+        //     ORDER BY 
+        //         customer_group_id, delivery_order `;
+            `SELECT 
+                customer.*,
+                MAX(sale.created_at) AS last_visit,
+                COUNT(CASE WHEN MONTH(sale.created_at) = MONTH(CURRENT_DATE()) THEN 1 END) AS visits_this_month
+            FROM 
+                customer 
+            LEFT JOIN 
+                sale 
+            ON 
+                customer.id = sale.customer_id
+            WHERE 
+                customer.customer_group_id = ?
+            GROUP BY 
+                customer.id
+            ORDER BY 
+                customer.customer_group_id, customer.delivery_order`;
             
             const [rows] = await pool.query(sql,[customerGroupId]); 
 
