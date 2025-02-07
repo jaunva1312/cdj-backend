@@ -93,7 +93,7 @@ class Sale  {
                 customer_id,
                 customer_group_id,
                 ammount, 
-                pyment_method,
+                payment_method,
                 sale_type,
                 sale_status) 
                 VALUES(?,?,?,?,?,?,?,?,?)`;
@@ -105,7 +105,7 @@ class Sale  {
                 customer_id,
                 customer_group_id,
                 ammount, 
-                pyment_method,
+                payment_method,
                 sale_type,
                 sale_status
             } = saleRawObject
@@ -117,7 +117,7 @@ class Sale  {
                 customer_id,
                 customer_group_id,
                 ammount, 
-                pyment_method,
+                payment_method,
                 sale_type,
                 sale_status
             ]);
@@ -138,7 +138,7 @@ class Sale  {
                 customer_id = IFNULL(?,customer_id),
                 customer_group_id = IFNULL(?,customer_group_id), 
                 ammount = IFNULL(?,ammount), 
-                pyment_method = IFNULL(?,pyment_method), 
+                payment_method = IFNULL(?,payment_method), 
                 sale_type = IFNULL(?,sale_type), 
                 sale_status = IFNULL(?,sale_status)
                 WHERE id_sale = ?`;
@@ -150,7 +150,7 @@ class Sale  {
                 customer_id,
                 customer_group_id,
                 ammount, 
-                pyment_method,
+                payment_method,
                 sale_type,
                 sale_status
             } = saleObject
@@ -159,7 +159,7 @@ class Sale  {
                 customer_id,
                 customer_group_id,
                 ammount, 
-                pyment_method,
+                payment_method,
                 sale_type,
                 sale_status,id
             ]);
