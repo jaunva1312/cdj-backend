@@ -9,7 +9,7 @@ router.get('/customers', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.is
 
 router.get('/customer/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor], Customer.getCustomer);
 
-router.get('/customersByGroup/:id', [authJwt.verifyToken, authJwt.isDeliveryMan, authJwt.isSalesSupervisor], Customer.getCustomersByGroup);
+router.get('/customersByGroup/:id', [authJwt.verifyToken, authJwt.isDeliveryMan], Customer.getCustomersByGroup);
 
 router.get('/customers/nearest-customer/:lat/:long', Customer.getNearestSellPoint);
 
