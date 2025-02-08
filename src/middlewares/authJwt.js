@@ -32,7 +32,7 @@ export const isDeliveryMan = async(req,res,next) =>{
     const roles = user.roles;
 
     for (let i= 0; i < roles.length; i++){
-        if (roles[i] == "REPARTIDOR" || roles[i] == "SUPER ADMIN"){
+        if (roles[i] == "REPARTIDOR" || roles[i] == "SUPERVISOR VENTAS" || roles[i] == "ADMIN" || roles[i] == "SUPER ADMIN"){
             next();
             return;
         }
@@ -61,7 +61,7 @@ export const isSalesSupervisor = async(req,res,next) =>{
     const roles = user.roles;
 
     for (let i= 0; i < roles.length; i++){
-        if (roles[i] == "SUPERVISOR VENTAS" || roles[i] == "SUPER ADMIN"){
+        if (roles[i] == "SUPERVISOR VENTAS" || roles[i] == "ADMIN" || roles[i] == "SUPER ADMIN"){
             next();
             return;
         }
