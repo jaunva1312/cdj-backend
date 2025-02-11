@@ -244,7 +244,9 @@ class User {
         try {
 
             var sql = `UPDATE user SET
-                name = IFNULL(?,name), 
+                user_name = IFNULL(?,user_name),
+                name = IFNULL(?,name),
+                email = IFNULL(?,email), 
                 password = IFNULL(?,password), 
                 roles = IFNULL(?,roles), 
                 customer_group_id = IFNULL(?,customer_group_id), 
@@ -255,7 +257,9 @@ class User {
 
 
             const {
+                user_name,
                 name, 
+                email,
                 password,
                 roles,
                 customer_group_id, 
@@ -263,14 +267,17 @@ class User {
             } = modifiedUserObject
 
             const [result] = await pool.query(sql, [
+                user_name,
                 name, 
-                password, 
-                roles.toString(), 
+                email,
+                password,
+                roles != null ? roles.toString() :roles, 
                 customer_group_id,
                 is_enable, id
             ]);
+
            
-            if(result.affectedRows === 0) throw ("User not found");
+            if(result.affectedRows == 0) throw ("User not found");
 
             let  [rows] = await pool.query(sqlConsult,[id]);
 

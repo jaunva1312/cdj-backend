@@ -84,3 +84,31 @@ export const login = async (req,res) => {
     }  
 }
 
+export const updateUser = async (req,res) => {
+
+    //Encrypt password
+    req.body.password = await User.encryptPassword(req.body.password);
+
+    try{
+
+        const user  = await User.updateUser(req.body, req.params.id);
+        
+        //Send response
+        res.status(200).json({
+            user_name: user.user_name,
+            name: user.name,
+            email: user.email,
+            roles: user.roles,
+            customer_group: user.customer_group_id
+        });
+
+            
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Something went wrong updating the user: ' +  error
+        });
+    }
+    
+
+}
+
