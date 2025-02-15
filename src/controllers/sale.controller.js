@@ -79,13 +79,16 @@ const sale = {
         const saleId = req.body.id_sale;
         try {
             let newSale = await Sale.createSale(req.body);
-            
-            for await (let saleDelivery of salesDeliveries){
-                saleDelivery.id = saleId;
-                newSalesDeliveries.push (await SaleDelivery.createSaleDelivery(saleDelivery));
+
+            if(salesDeliveries!= null){
+
+                for await (let saleDelivery of salesDeliveries){
+                    saleDelivery.id = saleId;
+                    newSalesDeliveries.push (await SaleDelivery.createSaleDelivery(saleDelivery));
+                }
+                
+                newSale.sales_deliveries = newSalesDeliveries;
             }
-            
-            newSale.sales_deliveries = newSalesDeliveries;
             
             res.send(newSale);
         } catch (error) {

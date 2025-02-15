@@ -191,7 +191,7 @@ class Sale  {
     }
 
     static async getCustomerLastSales(customer_id, number){
-
+                 
         var saleObjects;
 
         try {
@@ -227,7 +227,7 @@ class Sale  {
 
             const [rows] = await pool.query(sql,[
                 customer_id,
-                number
+                parseInt(number)
             ]); 
 
 
