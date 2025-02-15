@@ -190,6 +190,63 @@ class Sale  {
         }
     }
 
+    static async getCustomerLastSales(customer_id, number){
+
+        var saleObjects;
+
+        try {
+            
+            var sql =
+            `
+            SELECT 
+                sale.*, 
+                customergroup.name as customer_group_name,
+                customer.name as customer_name
+
+            FROM
+                sale
+
+            LEFT JOIN 
+                customer 
+            ON 
+                sale.customer_id = customer.id
+
+            LEFT JOIN 
+                customergroup 
+            ON 
+                sale.customer_group_id = customergroup.id
+            WHERE
+                
+                sale.customer_id = ?
+
+            ORDER BY sale.created_at DESC
+            LIMIT ?;
+            `;
+
+            
+
+            const [rows] = await pool.query(sql,[
+                customer_id,
+                number
+            ]); 
+
+
+            if(rows.length < 1) return null;
+            
+            saleObjects = rows;
+            for await (let obj of saleObjects){
+               obj.sales_deliveries = await SaleDelivery.getSalesDeliveries(obj.id_sale);
+            }
+
+            return saleObjects;
+            
+
+        } catch (error) {
+            throw(error);
+        } 
+
+    }
+
     static async getSalesByDateAndProduct(startDate, endDate, productName){
 
         try {

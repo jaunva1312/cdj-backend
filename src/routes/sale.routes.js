@@ -13,6 +13,8 @@ router.patch('/sale/:id', Sale.updateSale);
 
 router.delete('/sale/:id', Sale.deleteSale);
 
+router.get('/customerlastsales',Sale.getCustomerLastSales);
+
 router.get('/salesbyproduct/', Sale.getSalesByProduct);
 
 router.get('/salesbycustomergroup/', Sale.getSalesSumaryByCustomerGroup);

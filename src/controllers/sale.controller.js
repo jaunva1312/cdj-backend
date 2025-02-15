@@ -33,6 +33,35 @@ const sale = {
 
     },
 
+    getCustomerLastSales: async function(req,res) {
+        let sales;
+
+        try {
+
+            if(req.query.number != '' && req.query.customer_id != ''){
+
+                sales = await Sale.getCustomerLastSales(req.query.customer_id, req.query.number);
+            }else{
+                return res.status(500).json({
+                    message: 'Query parameters customer_id as number are required'
+                });
+            }
+            
+            if(sales == null) return res.status(404).json({
+                menssage: 'Sales information not found'
+
+            });
+
+            res.send(sales);  
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the last sales:, ' + error
+            });
+        }
+
+    },
+
     getSale: async function (req,res){
         try {
             const sale = await Sale.getSaleById(req.params.id);
