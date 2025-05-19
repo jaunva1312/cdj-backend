@@ -13,6 +13,8 @@ router.get('/customersByGroup/:id', [authJwt.verifyToken, authJwt.isDeliveryMan]
 
 router.get('/customers/nearest-customer/:lat/:long', Customer.getNearestSellPoint);
 
+router.get('/customers/customers-without-sales-today', Customer.getCustomersWithoutTodaysSale);
+
 router.post('/customer', [authJwt.verifyToken, authJwt.isDeliveryMan], Customer.createCustomer);
 
 router.patch('/customer/:id', authJwt.verifyToken, Customer.updateCustomer);

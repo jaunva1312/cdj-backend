@@ -92,6 +92,17 @@ const customer = {
             });
         }
     },
+
+    getCustomersWithoutTodaysSale: async function(req,res) {
+        try {
+            const customers = await Customer.getCustomersWithoutTodaysSale();
+            res.send(customers);
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the customers without sales today'  + error
+            });
+        }
+    },
 }
 
 export default customer

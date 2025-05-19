@@ -302,9 +302,56 @@ class Customer  {
         } 
 
     }
+
+    static async getCustomersWithoutTodaysSale(){
+        
+        try {
+            
+            var sql = 
+                `
+                SELECT 
+                    id, name, delivery_days, customer_group_id
+                FROM 
+                    customer
+                WHERE 
+                    FIND_IN_SET(
+                        CASE DAYOFWEEK(CURDATE())
+                            WHEN 1 THEN 'D'
+                            WHEN 2 THEN 'L'
+                            WHEN 3 THEN 'M'
+                            WHEN 4 THEN 'MI'
+                            WHEN 5 THEN 'J'
+                            WHEN 6 THEN 'V'
+                            WHEN 7 THEN 'S'
+                        END,
+                        REPLACE(UPPER(delivery_days), ' ', '')
+                    )
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM sale s
+                        WHERE s.customer_id = customer.id
+                        AND DATE(s.created_at) = CURDATE()
+                    )
+                    AND customer_group_id <> '2e9029d0'
+                ORDER BY customer_group_id;
+                `
+            
+            const [rows] = await pool.query(sql);
+
+
+            if(rows.length < 1) return null;
+            
+            return rows;  
+
+        } catch (error) {
+            throw(error);
+        } 
+    }
     
     
 }
+
+
 
 export { Customer };
 
