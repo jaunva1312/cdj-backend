@@ -310,7 +310,7 @@ class Customer  {
             var sql = 
                 `
                 SELECT 
-                    id, name, delivery_days, customer_group_id
+                    *
                 FROM 
                     customer
                 WHERE 
