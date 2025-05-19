@@ -24,7 +24,7 @@ class Product  {
                     ON product.id_supplier = supplier.id_supplier
                     WHERE
                         is_available
-                        is_for_route_sales = ?
+                        AND is_for_route_sales = ?
                     ORDER BY view_order`;
     
             }
