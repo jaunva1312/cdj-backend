@@ -23,7 +23,7 @@ class Product  {
                     LEFT JOIN supplier
                     ON product.id_supplier = supplier.id_supplier
                     WHERE
-                        is_available = 1
+                        is_available
                         is_for_route_sales = ?
                     ORDER BY view_order`;
     
@@ -37,7 +37,7 @@ class Product  {
                     LEFT JOIN supplier
                     ON product.id_supplier = supplier.id_supplier
                     WHERE
-                        is_available = 1
+                        is_available
                     ORDER BY view_order`;
             }
             
