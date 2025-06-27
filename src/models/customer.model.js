@@ -311,14 +311,12 @@ class Customer  {
                 `
                 SELECT 
                     customer.*,
-                    MAX(sale.created_at) AS last_visit,
+                    MAX(CASE WHEN MONTH(sale.created_at) = MONTH(CURRENT_DATE()) THEN sale.created_at END) AS last_visit,
                     COUNT(CASE WHEN MONTH(sale.created_at) = MONTH(CURRENT_DATE()) THEN 1 END) AS visits_this_month
                 FROM 
                     customer
                 LEFT JOIN 
-                    sale 
-                ON 
-                    customer.id = sale.customer_id
+                    sale ON customer.id = sale.customer_id
                 WHERE 
                     FIND_IN_SET(
                         CASE DAYOFWEEK(CURDATE())
@@ -330,7 +328,7 @@ class Customer  {
                             WHEN 6 THEN 'V'
                             WHEN 7 THEN 'S'
                         END,
-                        REPLACE(UPPER(delivery_days), ' ', '')
+                        REPLACE(UPPER(customer.delivery_days), ' ', '')
                     )
                     AND NOT EXISTS (
                         SELECT 1
@@ -339,7 +337,10 @@ class Customer  {
                         AND DATE(s.created_at) = CURDATE()
                     )
                     AND customer.customer_group_id <> '2e9029d0'
-                ORDER BY customer.customer_group_id;
+                GROUP BY 
+                    customer.id
+                ORDER BY 
+                    customer.customer_group_id;
                 `
             
             const [rows] = await pool.query(sql);
