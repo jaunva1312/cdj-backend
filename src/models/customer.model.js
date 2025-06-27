@@ -310,7 +310,9 @@ class Customer  {
             var sql = 
                 `
                 SELECT 
-                    *
+                    customer.*,
+                    MAX(sale.created_at) AS last_visit,
+                    COUNT(CASE WHEN MONTH(sale.created_at) = MONTH(CURRENT_DATE()) THEN 1 END) AS visits_this_month
                 FROM 
                     customer
                 WHERE 
