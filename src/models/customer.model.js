@@ -315,6 +315,10 @@ class Customer  {
                     COUNT(CASE WHEN MONTH(sale.created_at) = MONTH(CURRENT_DATE()) THEN 1 END) AS visits_this_month
                 FROM 
                     customer
+                LEFT JOIN 
+                    sale 
+                ON 
+                    customer.id = sale.customer_id
                 WHERE 
                     FIND_IN_SET(
                         CASE DAYOFWEEK(CURDATE())
