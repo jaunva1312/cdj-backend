@@ -338,8 +338,8 @@ class Customer  {
                         WHERE s.customer_id = customer.id
                         AND DATE(s.created_at) = CURDATE()
                     )
-                    AND customer_group_id <> '2e9029d0'
-                ORDER BY customer_group_id;
+                    AND customer.customer_group_id <> '2e9029d0'
+                ORDER BY customer.customer_group_id;
                 `
             
             const [rows] = await pool.query(sql);
