@@ -566,7 +566,7 @@ class Sale  {
 
                 `
             
-            const [rows] = await pool.query(sql,[productId]);
+            const [rows] = await pool.query(sql,[productId,productId]);
 
 
             if(rows.length < 1) return null;
