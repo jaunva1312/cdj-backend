@@ -545,12 +545,14 @@ class Sale  {
                                     WHEN sd.product_id = ? THEN c.id
                                     ELSE NULL
                                 END) AS customers_with_product,
-                    ROUND(
-                        (COUNT(DISTINCT CASE 
-                                        WHEN sd.product_id = ? THEN c.id
-                                        ELSE NULL
-                                    END) / COUNT(DISTINCT c.id)) * 100, 2
-                    ) AS percentage_with_product
+                    CAST(
+                        (
+                            COUNT(DISTINCT CASE 
+                                            WHEN sd.product_id = @product_id THEN c.id
+                                            ELSE NULL
+                                        END) / COUNT(DISTINCT c.id)
+                        ) * 100
+                    AS DECIMAL(5,2)) AS percentage_with_product
                 FROM 
                     customer c
                 JOIN 
