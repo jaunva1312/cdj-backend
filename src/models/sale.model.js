@@ -531,7 +531,7 @@ class Sale  {
         } 
     }
 
-    static async getProductPercentageByCustomer(productId){
+    static async getCustomersPercentageByProduct(productId){
         
         try {
             

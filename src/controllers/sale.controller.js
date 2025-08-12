@@ -238,14 +238,14 @@ const sale = {
 
     },
 
-    getProductPercentageByCustomer: async function(req,res) {
+    getCustomersPercentageByProduct: async function(req,res) {
         let saleData;
 
         try {
 
             if(req.query.productId != ''){
 
-                saleData = await Sale.getProductPercentageByCustomer(req.query.productId);
+                saleData = await Sale.getCustomersPercentageByProduct(req.query.productId);
             }else{
                 return res.status(500).json({
                     message: 'Query parameter productId is required'
