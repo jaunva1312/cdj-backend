@@ -23,7 +23,7 @@ router.get('/salesdetailsbycustomergroup/', Sale.getSalesDetailsByCustomerGroup)
 
 router.get('/salesbyweek/', Sale.getSalesByWeek);
 
-router.get('/customersporcentagebyproduct/', Sale.getCustomersPercentageByProduct);
+router.get('/customerspercentagebyproduct/', Sale.getCustomersPercentageByProduct);
 
 
 
