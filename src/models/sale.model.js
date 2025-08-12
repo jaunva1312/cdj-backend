@@ -531,6 +531,53 @@ class Sale  {
         } 
     }
 
+    static async getProductPercentageByCustomer(productId){
+        
+        try {
+            
+            var sql = 
+                `
+                SELECT 
+                    cg.id,
+                    cg.name,
+                    COUNT(DISTINCT c.id) AS total_customers_in_group,
+                    COUNT(DISTINCT CASE 
+                                    WHEN sd.product_id = ? THEN c.id
+                                    ELSE NULL
+                                END) AS customers_with_product,
+                    ROUND(
+                        (COUNT(DISTINCT CASE 
+                                        WHEN sd.product_id = ? THEN c.id
+                                        ELSE NULL
+                                    END) / COUNT(DISTINCT c.id)) * 100, 2
+                    ) AS percentage_with_product
+                FROM 
+                    customer c
+                JOIN 
+                    customergroup cg ON c.customer_group_id = cg.id
+                LEFT JOIN 
+                    sale_delivery sd ON c.id = sd.customer_id
+
+                GROUP BY 
+                    cg.id, cg.name
+                    
+                ORDER BY
+                    cg.name;
+
+                `
+            
+            const [rows] = await pool.query(sql,[productId]);
+
+
+            if(rows.length < 1) return null;
+            
+            return rows;  
+
+        } catch (error) {
+            throw(error);
+        } 
+    }
+
     
 
     

@@ -237,6 +237,35 @@ const sale = {
         }
 
     },
+
+    getProductPercentageByCustomer: async function(req,res) {
+        let saleData;
+
+        try {
+
+            if(req.query.productId != ''){
+
+                saleData = await Sale.getProductPercentageByCustomer(req.query.productId);
+            }else{
+                return res.status(500).json({
+                    message: 'Query parameter productId is required'
+                });
+            }
+            
+            if(saleData == null) return res.status(404).json({
+                menssage: 'Sales information not found'
+
+            });
+
+            res.send(saleData);  
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the customers percentage by product:, ' + error
+            });
+        }
+
+    },
     
 
 }

@@ -23,6 +23,8 @@ router.get('/salesdetailsbycustomergroup/', Sale.getSalesDetailsByCustomerGroup)
 
 router.get('/salesbyweek/', Sale.getSalesByWeek);
 
+router.get('/productpercentagebycustomer/', Sale.getProductPercentageByCustomer);
+
 
 
 export default router
