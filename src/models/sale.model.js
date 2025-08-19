@@ -371,7 +371,7 @@ class Sale  {
         } 
     }
 
-    static async getSalesDetailsByCustomeId(startDate, endDate, customerGroupId, productName){
+    static async getSalesDetailsByCustomerId(startDate, endDate, customerGroupId, productName){
         
         console.log(productName);
         try {
@@ -579,6 +579,56 @@ class Sale  {
             throw(error);
         } 
     }
+
+    static async getCustomersWithoutProduct(productId, startDate, endDate)
+    {
+        try {
+            // Si hay múltiples grupos, los convertimos en placeholders para IN (...)
+            let groupFilter = '';
+            let params = [productId, startDate, endDate];
+
+            if (customerGroupIds && customerGroupIds.length > 0) {
+                const placeholders = customerGroupIds.map(() => '?').join(',');
+                groupFilter = `AND cg.id IN (${placeholders})`;
+                params = params.concat(customerGroupIds);
+            }
+
+            const sql = `
+                SELECT 
+                    cg.id AS customer_group_id,
+                    cg.name AS customer_group_name,
+                    c.delivery_order,
+                    c.id AS customer_id,
+                    c.name AS customer_name
+                FROM 
+                    customer c
+                JOIN 
+                    customergroup cg ON c.customer_group_id = cg.id
+                WHERE 
+                    NOT EXISTS (
+                        SELECT 1
+                        FROM sale_delivery sd
+                        WHERE sd.customer_id = c.id
+                        AND sd.product_id = ?
+                        AND sd.date BETWEEN ? AND ?
+                    )
+                    ${groupFilter}
+                ORDER BY 
+                    cg.name,
+                    c.delivery_order;
+            `;
+
+            const [rows] = await pool.query(sql, params);
+
+            if (rows.length < 1) return null;
+
+            return rows;
+
+        } catch (error) {
+            throw error;
+        }
+}
+
 
     
 

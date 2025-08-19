@@ -187,7 +187,7 @@ const sale = {
 
             if(req.query.start_date != '' && req.query.end_date != '' && req.query.customer_group_id != ''){
 
-                saleData = await Sale.getSalesDetailsByCustomeId(req.query.start_date, req.query.end_date, req.query.customer_group_id, req.query.product_name);
+                saleData = await Sale.getSalesDetailsByCustomerId(req.query.start_date, req.query.end_date, req.query.customer_group_id, req.query.product_name);
             }else{
                 return res.status(500).json({
                     message: 'Querey parameters start_date, end_date and customer_group_id are required'
