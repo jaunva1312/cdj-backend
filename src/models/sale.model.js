@@ -531,53 +531,52 @@ class Sale  {
         } 
     }
 
-    static async getCustomersPercentageByProduct(productId){
+    static async getCustomersPercentageByProduct(productId, startDate, endDate){
         
         try {
-            
-            var sql = 
-                `
-                SELECT 
-                    cg.id,
-                    cg.name,
-                    COUNT(DISTINCT c.id) AS total_customers_in_group,
-                    COUNT(DISTINCT CASE 
-                                    WHEN sd.product_id = ? THEN c.id
-                                    ELSE NULL
-                                END) AS customers_with_product,
-                    CAST(
-                        (
-                            COUNT(DISTINCT CASE 
-                                            WHEN sd.product_id = ? THEN c.id
-                                            ELSE NULL
-                                        END) / COUNT(DISTINCT c.id)
-                        ) * 100
-                    AS DECIMAL(5,2)) AS percentage_with_product
-                FROM 
-                    customer c
-                JOIN 
-                    customergroup cg ON c.customer_group_id = cg.id
-                LEFT JOIN 
-                    sale_delivery sd ON c.id = sd.customer_id
+        const sql = `
+            SELECT 
+                cg.id,
+                cg.name,
+                COUNT(DISTINCT c.id) AS total_customers_in_group,
+                COUNT(DISTINCT CASE 
+                                WHEN sd.product_id = ? 
+                                     AND sd.date BETWEEN ? AND ? THEN c.id
+                                ELSE NULL
+                            END) AS customers_with_product,
+                CAST(
+                    (
+                        COUNT(DISTINCT CASE 
+                                        WHEN sd.product_id = ? 
+                                             AND sd.date BETWEEN ? AND ? THEN c.id
+                                        ELSE NULL
+                                    END) / COUNT(DISTINCT c.id)
+                    ) * 100
+                AS DECIMAL(5,2)) AS percentage_with_product
+            FROM 
+                customer c
+            JOIN 
+                customergroup cg ON c.customer_group_id = cg.id
+            LEFT JOIN 
+                sale_delivery sd ON c.id = sd.customer_id
+            GROUP BY 
+                cg.id, cg.name
+            ORDER BY
+                cg.name;
+        `;
 
-                GROUP BY 
-                    cg.id, cg.name
-                    
-                ORDER BY
-                    cg.name;
+        // Los parámetros se repiten porque se usan en ambos CASE
+        const params = [productId, startDate, endDate, productId, startDate, endDate];
 
-                `
-            
-            const [rows] = await pool.query(sql,[productId,productId]);
+        const [rows] = await pool.query(sql, params);
 
+        if (rows.length < 1) return null;
 
-            if(rows.length < 1) return null;
-            
-            return rows;  
+        return rows;
 
-        } catch (error) {
-            throw(error);
-        } 
+    } catch (error) {
+        throw error;
+    }
     }
 
     static async getCustomersWithoutProduct(productId, startDate, endDate)

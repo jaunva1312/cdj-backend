@@ -245,7 +245,7 @@ const sale = {
 
             if(req.query.productId != ''){
 
-                saleData = await Sale.getCustomersPercentageByProduct(req.query.productId);
+                saleData = await Sale.getCustomersPercentageByProduct(req.query.productId, req.query.start_date, req.query.end_date);
             }else{
                 return res.status(500).json({
                     message: 'Query parameter productId is required'
