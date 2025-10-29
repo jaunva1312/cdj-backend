@@ -25,6 +25,8 @@ router.get('/salesbyweek/', Sale.getSalesByWeek);
 
 router.get('/customerspercentagebyproduct/', Sale.getCustomersPercentageByProduct);
 
+router.get('/customerssalesbyproduct', Sale.getCustomersSalesByProductAndDates);
+
 
 
 export default router

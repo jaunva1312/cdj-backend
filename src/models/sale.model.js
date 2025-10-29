@@ -565,18 +565,18 @@ class Sale  {
                 cg.name;
         `;
 
-        // Los parámetros se repiten porque se usan en ambos CASE
-        const params = [productId, startDate, endDate, productId, startDate, endDate];
+            // Los parámetros se repiten porque se usan en ambos CASE
+            const params = [productId, startDate, endDate, productId, startDate, endDate];
 
-        const [rows] = await pool.query(sql, params);
+            const [rows] = await pool.query(sql, params);
 
-        if (rows.length < 1) return null;
+            if (rows.length < 1) return null;
 
-        return rows;
+            return rows;
 
-    } catch (error) {
-        throw error;
-    }
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async getCustomersWithoutProduct(productId, startDate, endDate)
