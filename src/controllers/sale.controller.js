@@ -266,6 +266,35 @@ const sale = {
         }
 
     },
+
+    getCustomersSalesByProductAndDates: async function(req,res) {
+        let saleData;
+
+        try {
+
+            if(req.query.productId != '' && req.query.customer_group_id != '' && req.query.start_date && req.query.end_date){
+
+                saleData = await Sale.getCustomersSalesByProductAndDates(req.query.productId, req.query.customer_group_id, req.query.start_date, req.query.end_date);
+            }else{
+                return res.status(500).json({
+                    message: 'Query parameter productId,customerGroupId, startDate and endDate are required'
+                });
+            }
+            
+            if(saleData == null) return res.status(404).json({
+                menssage: 'Sales information not found'
+
+            });
+
+            res.send(saleData);  
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something goes wrong getting the customers percentage by product:, ' + error
+            });
+        }
+
+    },
     
 
 }

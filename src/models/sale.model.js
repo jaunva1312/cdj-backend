@@ -579,6 +579,53 @@ class Sale  {
         }
     }
 
+    static async getCustomersSalesByProductAndDates(productId, customerGroup, startDate, endDate){
+        
+        try {
+        const sql = `
+            SELECT 
+                c.id AS customer_id,
+                c.delivery_order,
+                c.name AS customer_name, 
+                c.alias,
+                p.name,
+                SUM(sd.quantity) AS total_quantity
+
+            FROM 
+                sale_delivery sd 
+            JOIN 
+                customer c ON sd.customer_id = c.id 
+            JOIN 
+                customergroup cg ON c.customer_group_id = cg.id
+            JOIN 
+                sale s ON sd.sale_id = s.id_sale
+            JOIN 
+                product p ON sd.product_id = p.id_product
+            WHERE 
+                sd.product_id = ?
+                AND s.customer_group_id = ?
+                AND sd.date BETWEEN ? AND ? 
+                
+
+            GROUP BY c.customer_group_id, c.id, c.name, sd.product_id 
+                
+            ORDER BY c.delivery_order ASC
+        `;
+
+            // Los parámetros se repiten porque se usan en ambos CASE
+            const params = [productId, customerGroup, startDate, endDate];
+
+            const [rows] = await pool.query(sql, params);
+
+            if (rows.length < 1) return null;
+
+            return rows;
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async getCustomersWithoutProduct(productId, startDate, endDate)
     {
         try {
