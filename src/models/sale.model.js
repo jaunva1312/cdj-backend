@@ -588,7 +588,7 @@ class Sale  {
                 c.delivery_order,
                 c.name AS customer_name, 
                 c.alias,
-                p.name,
+                p.name AS product,
                 SUM(sd.quantity) AS total_quantity
 
             FROM 
