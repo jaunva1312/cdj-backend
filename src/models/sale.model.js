@@ -589,7 +589,7 @@ class Sale  {
                 c.name AS customer_name, 
                 c.alias,
                 p.name AS product,
-                SUM(sd.quantity) AS total_quantity
+                CAST(SUM(sd.quantity) AS UNSIGNED) AS total_quantity
 
             FROM 
                 sale_delivery sd 
