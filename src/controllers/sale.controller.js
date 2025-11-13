@@ -90,8 +90,8 @@ const sale = {
                 newSale.sales_deliveries = newSalesDeliveries;
             }
             
-            //res.send(newSale);
-            return res.status(201).json(newSale);
+            res.send(newSale);
+            //return res.status(201).json(newSale);
             
         } catch (error) {
             if (error && error.status === 409) {
