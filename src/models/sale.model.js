@@ -132,7 +132,7 @@ class Sale  {
                 e.code = 'DUPLICATE_SALE_ID';      // útil para el controller/cliente
                 throw e;
             }
-            throw err;
+            throw error;
         }
     }
 
