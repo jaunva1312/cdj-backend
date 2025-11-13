@@ -90,10 +90,18 @@ const sale = {
                 newSale.sales_deliveries = newSalesDeliveries;
             }
             
-            res.send(newSale);
+            //res.send(newSale);
+            return res.status(201).json(newSale);
+            
         } catch (error) {
+            if (error && error.status === 409) {
+                return res.status(409).json({
+                    message: error.message,
+                    code: error.code || 'DUPLICATE_SALE_ID'
+                });
+            }
             return res.status(500).json({
-                message: 'Something goes wrong creating the sale: '  + error
+                message: 'Something goes wrong creating the sale: ' + error
             });
         } 
     },
