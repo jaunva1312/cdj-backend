@@ -126,7 +126,13 @@ class Sale  {
             
 
         }catch(error){
-            throw(error);
+            if (err && err.code === 'ER_DUP_ENTRY') {
+                const e = new Error(`El id_sale '${saleRawObject.id_sale}' ya existe.`);
+                e.status = 409;                    // solicitado por ti
+                e.code = 'DUPLICATE_SALE_ID';      // útil para el controller/cliente
+                throw e;
+            }
+            throw err;
         }
     }
 
